@@ -1,0 +1,14 @@
+{
+  "name": "dce-wiki",
+  "version": "1.0.0",
+  "description": "Dce Wiki",
+  "author": "Drunk",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.8.1",
+    "vuepress": "^1.8.1"
+  }
+}
