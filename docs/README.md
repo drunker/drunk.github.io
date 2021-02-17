@@ -1,21 +1,19 @@
 ---
-sidebar: false
-prev: false
-next: false
-editLink: false
+home: true
+heroText: DCE
+tagline: null
+footer: MulanPSL-2.0 Licensed | Copyright © 2021-present DCE
 ---
 
 <style>
-  .no-sidebar .page-edit {
-    display: none;
+  .no-sidebar .home {
+    max-width: 1280px;
   }
   .no-sidebar p img {
     display: block;
     margin: 40px auto;
   }
 </style>
-
-# DCE
 
 Dce是一款基于PHP8开发的网络编程框架，支持传统Cgi式Web编程及命令行工具编程，也支持Swoole下常驻内存式Web编程与长连接服务器编程，并且设计了一套通用的RCR架构处理所有类型网络编程，让你的应用项目保持清晰整洁，助你轻松编写出易复用、好维护的代码。
 

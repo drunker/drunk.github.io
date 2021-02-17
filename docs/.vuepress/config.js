@@ -4,6 +4,7 @@ module.exports = {
   evergreen: true,
   dest: 'dist',
   title: 'Dce',
+  description: 'Dce是一款基于PHP8开发的网络编程框架，支持传统Cgi式Web编程及命令行工具编程，也支持Swoole下常驻内存式Web编程与长连接服务器编程，并且设计了一套通用的RCR架构处理所有类型网络编程，让你的应用项目保持清晰整洁，助你轻松编写出易复用、好维护的代码',
   locales: {
     '/': {
       lang: 'zh-CN',
