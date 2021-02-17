@@ -12,10 +12,21 @@ module.exports = {
   markdown: {
     lineNumbers: true
   },
-  plugins: ['@vuepress/back-to-top'],
+  plugins: [
+    '@vuepress/back-to-top',
+    [
+      '@vuepress/last-updated',
+      {
+        dateOptions: {
+          hour12: false
+        }
+      }
+    ]
+  ],
   themeConfig: {
     repo: 'idrunk/dce',
-    docsRepo: 'vuejs/dce-wiki',
+    docsRepo: 'idrunk/dce-wiki',
+    docsDir: 'docs',
     editLinks: true,
     editLinkText: '在Github上编辑此页',
     lastUpdated: '更新于',
@@ -30,9 +41,9 @@ module.exports = {
         title: '指南',
         children: [
           '/guide/',
-          '/guide/install',
-          '/guide/first-app',
           '/guide/design',
+          '/guide/get',
+          '/guide/first-app',
         ]
       },
       {

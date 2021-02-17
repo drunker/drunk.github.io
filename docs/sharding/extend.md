@@ -90,10 +90,10 @@ Co\run(function () {
 
 ### 执行拓库脚本
 
-Dce内置了按模分库拓库脚本，封装在内置项目`dce/project/dce`中，访问路径为`dce/sharding/extend`，执行前请先建好拓展库（无需建表），并且拓库配置已配好。
+Dce内置了按模分库拓库脚本，封装在内置项目`/project/dce`中，访问路径为`dce/sharding/extend`，执行前请先建好拓展库（无需建表），并且拓库配置已配好。
 
 ```bash {60}
-ubuntu run podman run --rm -it -v /mnt/f/App/Mine/dce/backend/dce:/app idrunk/swoole /app/run dce sharding extend
+ubuntu run podman run --rm -it -v /mnt/f/App/Mine/dce/backend/dce:/app idrunk/swoole /app/dce dce sharding extend
 
 # [14:01:49] 扩展配置校验通过
 # [14:01:49] 数据库已连接

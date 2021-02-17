@@ -20,7 +20,7 @@ return [
 ];
 ```
 
-## /dce/project/node/Node
+## \dce\project\node\Node
 
 节点类，类属性通过节点配置定义，DCE会自动将其转为节点对象属性。下述所有属性示例皆为节点配置示例。
 
@@ -185,7 +185,7 @@ websocket | Websocket请求
 - 返回`array`
 
 
-## /dce/project/node/NodeArgument
+## \dce\project\node\NodeArgument
 
 节点Url参数类，配置伪静态式Url参数的提取方式
 

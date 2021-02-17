@@ -1,6 +1,9 @@
 # 第一个应用
 
-## Cgi版Hello World
+作者创建了专门的[使用示例项目](./get.md#初始化一个dce应用环境)，推荐你看完本章后拉取该示例项目亲自动手尝试，会加深你的理解（该项目尚不完善，后续会慢慢完善，也欢迎你贡献用例源码）
+
+
+## Cgi网页版Hello World
 
 ### 新建项目
 
@@ -28,7 +31,7 @@
 return [
     [
         'path' => 'hello',
-        'controller' => 'DefaultController::index'
+        'controller' => 'DefaultController->index'
     ],
 ];
 ```
@@ -53,9 +56,9 @@ class DefaultController extends ViewHttpJson {
 
 ### 访问
 
-1. 访问之前需先部署，如果你不清楚如何部署，请先查阅 [部署](/deploy/) 篇
+1. 访问之前需先部署，你可以用Nginx、Apache、IIS部署，将默认文档设置为index.php，并将文档根目录设为[APP_WWW](/base/#app_www)
 
-2. 部署完成可访问你部署的地址（如，http://127.0.0.1/?/hello），得到如下json结果，表示访问成功。（Dce为了得到友好的Url，做了最简Url设计，如左，只比静态多了/?，当然你也可以配置Url重写去掉/?依赖）
+2. 部署完成可访问你部署的地址（如，http://127.0.0.1/?/hello），得到如下json结果，表示访问成功。（Dce为了得到友好的Url，做了最简Url设计，如左，只比静态多了`/?`，当然你也可以配置Url重写去掉`/?`依赖）
 
 ``` json
 {"data":{"message":"Hello World !"}}
@@ -65,7 +68,7 @@ class DefaultController extends ViewHttpJson {
 
 上面的例子，我们响应的json，是一个接口型页面。Dce当然也支持响应传统的Html页面，按下述步骤可以建立一个Html页面。
 
-1. 将 [新建控制器](./#新建控制器) 中继承的父类改为 ViewHttpHtml
+1. 将 [新建控制器](./#新建控制器) 中继承的父类改为`ViewHttpHtml`
 
 ``` php
 namespace hello\controller;
@@ -83,11 +86,11 @@ class DefaultController extends ViewHttpHtml {
 
 2. 修改nodes.php配置，指定模版文件路径
 
-``` php
+``` php {5}
 return [
     [
         'path' => 'hello',
-        'controller' => 'DefaultController::index',
+        'controller' => 'DefaultController->index',
         'php_template' => 'index.php',
     ],
 ];
@@ -133,16 +136,16 @@ return [
 
 ### 配置节点
 
-``` php
+``` php {2}
 return [
     'methods' => 'cli', // 属性的详细说明参见节点章
     'path' => 'hello/cli',
-    'controller' => 'CliController::index',
+    'controller' => 'CliController->index',
 ];
 ```
 
 ### 新建控制器
-1. 新建文件CliController.php
+1. 新建文件`CliController.php`
 
 2. 填充脚本如下
 
@@ -170,10 +173,10 @@ cd {$APP_ROOT}
 - 执行你的控制器方法
 
 ``` bash
-php run hello cli
+dce hello cli
 ```
 
-- 看到如下响应则表示脚本正常执行成功
+- 看到如下响应则表示脚本执行成功
 
 ```
 Hello World !
@@ -181,23 +184,23 @@ Hello World !
 
 ## Http服务器
 
-Dce内置了Http服务，是基于Swoole的Http Server封装开发的，Swoole需要在Linux运行，本例后续所有服务皆需在Linux下运行。Dce Http被以内置项目的形式封装在Dce中，下述为启动执行步骤
+Dce内置了Http服务器，是基于Swoole的Http Server封装开发的，Swoole需要在Linux运行，本例后续所有服务皆需在Linux下运行。Dce Http被以[内置项目](/service/http.md)的形式封装在Dce中，下述为启动执行步骤
 
 1. 如上述 [cli类接口](./#打开终端，进入应用根目录)一样，打开终端，进入应用根目录
 
 2. 启动Http服务
 
 ``` bash
-php run http start
+dce http start
 ```
 
-3. 访问之前的定义的接口：http://127.0.0.1:20460/?/hello（默认HttpServer端口为20460，可以通过common/config下的http.php自定义，详细参见 [内置Http服务](/http/) 篇）
+3. 访问之前的定义的接口：http://127.0.0.1:20460/?/hello（默认HttpServer端口为20460，可以通过`common/config/http.php`自定义，详细参见 [内置Http服务](/service/http.md) 篇）
 
 4. 看到响应"Hello World !"表示Http服务正常启动成功
 
 ## Websocket服务器
 
-Websocket也是以内置项目的形式封装的，Dce完全接管了websocket的message事件，将之作为请求响应式处理，当然你也可以只处理请求而不响应，或者异步响应。Dce会对数据以`explode(';', $data)`的形式拆包，第一部分将作为请求路径，会根据该路径定位Node节点，第二部分作为请求数据，如果该数据为json，则会自动解析为PHP数组存在`$request->request`上，你也可以通过`$request->rawData`取原始数据。当然这些拆包方法及定位Node等所有行为，你都可以自定义实现，完整介绍请参见 [内置Websocket服务](/websocket/)
+Websocket也是以[内置项目](/service/websocket.md)的形式封装的，Dce完全接管了websocket的message事件，将之作为请求响应式处理，当然你也可以只处理请求而不响应，或者异步响应。Dce会对数据以`explode("\n", $data)`的形式拆包，第一部分将作为请求路径，会根据该路径定位Node节点，第二部分作为请求数据，如果该数据为json，则会自动解析为PHP数组存在`$request->request`上，你也可以通过`$request->rawData`取原始数据。当然这些拆包方法及定位Node等所有行为，你都可以自定义实现，完整介绍请参见 [内置Websocket服务](/service/websocket.md)
 
 1. 配置节点，在nodes.php追加下述内容
 
@@ -205,7 +208,7 @@ Websocket也是以内置项目的形式封装的，Dce完全接管了websocket�
 [
     'methods' => 'websocket',
     'path' => 'hello/websocket',
-    'controller' => 'WebsocketController::index',
+    'controller' => 'WebsocketController->index',
 ],
 ```
 
@@ -224,10 +227,10 @@ class WebsocketController extends ViewConnection {
 }
 ```
 
-3. 启动Websocket服务
+3. 启动Websocket服务器
 
 ``` bash
-php run websocket start
+dce websocket start
 ```
 
 4. 打开Chrome，按F12打开开发者工具，切换到Console，粘贴执行下述代码
@@ -235,7 +238,7 @@ php run websocket start
 ``` javascript
 const ws = new WebSocket("ws://127.0.0.1:20461/");
 ws.onopen = () => {
-    ws.send("hello/websocket;Data from client");
+    ws.send("hello/websocket\nData from client");
 };
 ws.onmessage = (evt) => {
     console.log("Received data from server: " + evt.data);
@@ -246,14 +249,15 @@ ws.onmessage = (evt) => {
 5. 若看到打印的下述数据，则表示发送接收成功。（经历了连接-客户端发送-服务端接收-服务端解包-服务端定位并执行控制器-服务端打包-服务端发送-客户端接收这些过程）
 
 ```
-Received data from server: client/path;{"data":{"message":"Server received: Data from client"}}
+Received data from server: client/path
+{"data":{"message":"Server received: Data from client"}}
 ```
 
-你可能会说你需要发送到指定的客户端而不仅仅是响应某个消息，Dce当然支持，你可以到 内置Websocket 篇查看完整介绍以了解。
+你可能会说你需要发送到指定的客户端而不仅仅是响应某个消息，Dce当然支持，你可以到 [内置Websocket服务器](/service/websocket.md) 篇查看完整介绍以了解。
 
 ## Tcp服务器
 
-Tcp的封装与Websocket的非常相似，Dce完全接管了receive事件，打包拆包等用的与Websocket相同的默认工具。完整介绍请参见 [内置Tcp/Udp服务](/tcp/)
+Tcp的封装与Websocket的非常相似，Dce完全接管了receive事件，打包拆包等默认行为与Websocket相同。完整介绍请参见 [内置Tcp/Udp服务](/service/tcp.md)
 
 1. 配置节点，在nodes.php追加下述内容
 
@@ -261,11 +265,11 @@ Tcp的封装与Websocket的非常相似，Dce完全接管了receive事件，打�
 [
     'methods' => ['tcp', 'udp'], // 兼容tcp/udp
     'path' => 'hello/tcp',
-    'controller' => 'TcpController::index',
+    'controller' => 'TcpController->index',
 ],
 ```
 
-2. 创建控制器WebsocketController.php
+2. 创建控制器TcpController.php
 
 ``` php
 namespace hello\controller;
@@ -280,10 +284,10 @@ class TcpController extends ViewConnection {
 }
 ```
 
-3. 启动Websocket服务
+3. 启动Tcp服务
 
 ``` bash
-php run tcp start
+dce tcp start
 ```
 
 4. 使用netcat测试Tcp/Udp服务器
@@ -291,19 +295,23 @@ php run tcp start
 ``` bash
 # 测试Tcp连接
 ./nc 127.0.0.1 20462
-hello/tcp;Tcp data from client
+hello/tcp
+Tcp data from client
 
 # 测试Udp连接 (若为docker环境, 需要在映射端口指明为udp端口, 如-p 20463:20463/udp)
 ./nc -u 127.0.0.1 20463
-hello/tcp;Udp data from client
+hello/tcp
+Udp data from client
 ```
 
 5. 若看到打印的下述数据，则表示发送接收成功。（经历了连接-客户端发送-服务端接收-服务端解包-服务端定位并执行控制器-服务端打包-服务端发送-客户端接收这些过程）
 
 ```
 # Tcp通信成功响应
-client/path;{"data":{"message":"Server received: Tcp data from client\n"}}
+client/path
+{"data":{"message":"Server received: Tcp data from client\n"}}
 
 # Udp通信成功响应
-client/path;{"data":{"message":"Server received: Udp data from client\n"}}
+client/path
+{"data":{"message":"Server received: Udp data from client\n"}}
 ```

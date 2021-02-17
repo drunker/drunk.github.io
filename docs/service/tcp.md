@@ -2,7 +2,7 @@
 
 本章介绍Tcp/Udp服务器，前两章介绍的Http、Websocket服务器也能同时开启Tcp/Udp服务，而本章介绍的是专用的Tcp/Udp服务器。（其实也能通过各种配置实现支持Http、Websocket，但相对于直接使用相应服务器来说比较复杂）
 
-TCP/UDP服务器是以内置项目的形式封装于`dce/project/tcp`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\Server](/other/links.md#tcp-udp服务器)，你必须在Swoole环境才能开启此服务器。
+TCP/UDP服务器是以内置项目的形式封装于`project/tcp`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\Server](/other/links.md#tcp-udp服务器)，你必须在Swoole环境才能开启此服务器。
 
 
 ## 配置
@@ -46,9 +46,9 @@ Tcp/Udp服务器通过控制器`\tcp\controller\TcpServerController`暴露接口
 # Swoole环境运行
 php run tcp start
 # Docker/Podman运行Swoole镜像
-docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20462:20462 -p 20463:20463/udp idrunk/swoole /app/run tcp start
+docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20462:20462 -p 20463:20463/udp idrunk/swoole /app/dce tcp start
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20462:20462 -p 20463:20463/udp idrunk/swoole /app/run tcp start
+ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20462:20462 -p 20463:20463/udp idrunk/swoole /app/dce tcp start
 
 # 成功响应
 # Tcp server started with 0.0.0.0:20462.
@@ -84,7 +84,7 @@ nc -u 127.0.0.1 20463
 # Swoole环境运行
 php run tcp stop
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run tcp stop
+ubuntu run podman exec server /app/dce tcp stop
 
 # 成功响应
 # Tcp server was stopped.
@@ -97,7 +97,7 @@ ubuntu run podman exec server /app/run tcp stop
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run tcp reload
+ubuntu run podman exec server /app/dce tcp reload
 
 # 成功响应
 # Tcp server was reloaded.
@@ -110,7 +110,7 @@ ubuntu run podman exec server /app/run tcp reload
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run tcp status
+ubuntu run podman exec server /app/dce tcp status
 
 # {
 #     "server": {

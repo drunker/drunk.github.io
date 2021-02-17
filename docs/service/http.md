@@ -2,7 +2,7 @@
 
 Dce内置了HTTP服务器，是对[Swoole\Http\Server](/other/links.md#Http服务器)进行的封装，所以你必须在有Swoole的PHP环境下才能开启HTTP服务器。
 
-HTTP服务器是以内置项目的形式封装在Dce里面，项目路径为`dce/project/http`，支持自定义配置、扩展等。
+HTTP服务器是以内置项目的形式封装在Dce里面，项目路径为`project/http`，支持自定义配置、扩展等。
 
 
 ## 配置
@@ -23,7 +23,7 @@ return [
     ],
     'swoole_http' => [ // Swoole\Http\Server的配置，将直接传递给\Swoole\Server::set方法使用
         'enable_static_handler' => true,
-        'document_root' => dce\Dce::$config->wwwPath,
+        'document_root' => APP_WWW,
     ],
     '#extends' => [
         APP_COMMON . 'config/http.php', // 给用户自定义的项目扩展配置路径
@@ -48,9 +48,9 @@ HTTP服务器通过控制器`\http\controller\HttpServerController`暴露接口�
 # Swoole环境运行
 php run http start
 # Docker/Podman运行Swoole镜像
-docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20460:20460 idrunk/swoole /app/run http start
+docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20460:20460 idrunk/swoole /app/dce http start
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20460:20460 idrunk/swoole /app/run http start
+ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20460:20460 idrunk/swoole /app/dce http start
 
 # 成功响应
 # Http server started with 0.0.0.0:20460.
@@ -97,7 +97,7 @@ return [
 # Swoole环境运行
 php run http stop
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run http stop
+ubuntu run podman exec server /app/dce http stop
 
 # 成功响应
 # Http server was stopped.
@@ -110,7 +110,7 @@ ubuntu run podman exec server /app/run http stop
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run http reload
+ubuntu run podman exec server /app/dce http reload
 
 # 成功响应
 # Http server was reloaded.
@@ -123,7 +123,7 @@ ubuntu run podman exec server /app/run http reload
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run http status
+ubuntu run podman exec server /app/dce http status
 
 # {
 #     "server": {

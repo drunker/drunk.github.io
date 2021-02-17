@@ -7,7 +7,7 @@ DCE项目是为了切分不同类型的业务代码而抽象的概念，每个�
 DCE内置了一些项目，这些项目封装着内置服务，并通过控制器暴露了服务接口，详细文档参见[内置服务](/server/)。
 
 
-## /dce/project/ProjectManager
+## \dce\project\ProjectManager
 项目管理器
 
 
@@ -26,7 +26,7 @@ DCE内置了一些项目，这些项目封装着内置服务，并通过控制�
 - 返回`\dce\project\Project[]`
 
 
-## /dce/project/Project
+## \dce\project\Project
 项目类
 
 

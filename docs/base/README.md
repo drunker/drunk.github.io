@@ -5,10 +5,7 @@
 
 dce.php是框架入口，里面初始化了一些基础常量及加载器，并启动Dce。下述为常量说明：
 
-### `DS`
-`DIRECTORY_SEPARATOR`
-
-### `IS_CLI_MODE`
+### `DCE_CLI_MODE`
 是否cli模式。
 
 ### `DCE_ROOT`
@@ -26,24 +23,9 @@ dce.php是框架入口，里面初始化了一些基础常量及加载器，并�
 ### `APP_RUNTIME`
 运行时根目录，用于存放模板缓存、文件缓存等，默认为`APP_ROOT .'runtime/'`
 
-### `COMPOSER_ROOT`
-Composer根目录，用于存放composer库，默认为`APP_ROOT .'vendor/'`
+### `APP_WWW`
+Cgi入口/静态文件目录，默认为`APP_ROOT .'www/'`
 
-### `DCE_LIB_MODE`
-以库模式运行，支持下述值：
-值 | 模式
-:--: | :--
-0 | 应用模式，完整生命周期（默认）
-1 | 仅加载项目，不解析请求，不执行控制器方法
-2 | 仅加载库，不加载项目
-
-- 示例
-```php
-define('DCE_LIB_MODE', 2);
-require_once "./dce/dce.php";
-test(1);
-// int(1)
-```
 
 
 ## \dce\Dce
@@ -126,10 +108,67 @@ test(
 - 返回`bool`
 
 
-### `::boot()`
-引导路由
+### `::initOnly()`
+仅初始化Dce（不加载项目与节点，不引导调用控制器方法）(将Dce作为纯库使用)
 
 - 返回`void`
+
+- 示例
+```php
+require_once "./vendor/autoload.php";
+dce\Dce::initOnly();
+test(1);
+// int(1)
+```
+
+
+### `::scan()`
+初始化Dce及项目节点（不引导调用控制器方法）(将Dce作为带项目节点的库使用)
+
+- 返回`void`
+
+- 示例
+```php
+require_once "./vendor/autoload.php";
+dce\Dce::scan();
+test(dce\Dce::isDevEnv());
+// bool(false)
+```
+
+
+### `::boot()`
+引导路由（准备全部类库并引导执行控制器方法）（将Dce作为命令行工具、MVC框架、服务器使用）
+
+- 返回`void`
+
+- 示例
+
+作为命令行工具/服务器使用
+```php
+// 命令行工具文件: /dce
+require_once "./vendor/autoload.php";
+dce\Dce::boot();
+```
+
+```shell
+# 执行空命令
+php dce
+
+# 
+# 你正在cli模式以空路径请求Dce接口
+
+
+# 启动HTTP服务器
+php dce http start
+# Http server started with 0.0.0.0:20460.
+```
+
+作为Cgi的MVC框架使用
+```php
+// 框架入口文件: /www/index.php
+require_once "../vendor/autoload.php";
+dce\Dce::boot();
+```
 
 
 

@@ -14,6 +14,7 @@ return [
 所有配置项皆以蛇底形式书写，DCE会自动将其转换为`\dce\base\DceConfig`对象，且会以小驼峰的形式转换为对象属性，如数组配置为`['app_id'=>1]`，则转为对象后为`DceConfig->appId`，即原生支持的数组配置项为下述类属性的蛇底形式。
 
 
+
 ## \dce\config\DceConfig
 
 DCE配置类
@@ -36,9 +37,6 @@ DCE配置类
     './another_project',
 ],
 ```
-
-### `->wwwPath`
-`string` 静态资源目录、Cgi入口目录。默认为`APP_ROOT . 'www/'`。
 
 ### `->rewriteMode`
 `bool` 是否重写模式。用于使用url生成函数生成伪静态Url（如`Url::make('home/news', ['id'=>1])`可通过node配置生成，真：`/news/1.html`；假：`/?/news/1.html`），默认为假。
@@ -85,16 +83,16 @@ DCE配置类
         'dir' => APP_RUNTIME .'cache/', // 文件缓存目录
         'template_dir' => APP_RUNTIME . 'tpl/', // PHP模板文件缓存目录
     ],
-    'memcache' => [
-        'host' => '', // 缓存服务器
-        'port' => 0, // 缓存服务端口
-        'backup_on' => false, // 是否备份
-    ],
-    'memcached' => [
-        'host' => '', // 缓存服务器
-        'port' => 0, // 缓存服务端口
-        'backup_on' => false, // 是否备份
-    ],
+    // 'memcache' => [
+    //     'host' => '', // 缓存服务器
+    //     'port' => 0, // 缓存服务端口
+    //     'backup_on' => false, // 是否备份
+    // ],
+    // 'memcached' => [
+    //     'host' => '', // 缓存服务器
+    //     'port' => 0, // 缓存服务端口
+    //     'backup_on' => false, // 是否备份
+    // ],
 ],
 ```
 
@@ -103,10 +101,11 @@ DCE配置类
 ```php
 'session' => [
     'name' => 'dcesid', // Session ID名
-    'auto_start' => 1, // 是否自动启动
+    'auto_start' => 0, // 是否自动启动（默认不自启）
     'ttl' => 3600, // Session存活时间
-    // 'save_path' => '',
-    // 'save_class' => '',
+    'root' => APP_RUNTIME . 'session/', // 文件型Session处理器根目录或RedisSession处理器库号（库号暂未启用）
+    'class' => '\dce\project\request\SessionFile', // Session处理器类名（默认文件型）
+    // 'class' => '\dce\project\request\SessionRedis', // 系统内置了Redis型，可在common/config.php中配置启用
 ],
 ```
 

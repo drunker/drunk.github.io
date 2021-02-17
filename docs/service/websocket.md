@@ -1,6 +1,6 @@
 # Websocket服务器
 
-Dce以内置项目的形式封装了Websocket服务器，项目位于`dce/project/websocket`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\WebSocket\Server](/other/links.md#Websocket服务器)，你必须在Swoole环境才能开启此服务器。
+Dce以内置项目的形式封装了Websocket服务器，项目位于`project/websocket`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\WebSocket\Server](/other/links.md#Websocket服务器)，你必须在Swoole环境才能开启此服务器。
 
 Websocket服务器能同时方便的提供HTTP、Tcp/Udp服务支持，所以如果你需要这些服务，实例化一个Websocket服务器即可。
 
@@ -24,7 +24,7 @@ return [
     ],
     'swoole_websocket' => [ // Swoole\WebSocket\Server的配置，将直接传递给\Swoole\Server::set方法使用
         'enable_static_handler' => true,
-        'document_root' => dce\Dce::$config->wwwPath,
+        'document_root' => APP_WWW,
     ],
     '#extends' => [
         APP_COMMON . 'config/websocket.php', // 给用户自定义的项目扩展配置路径
@@ -47,9 +47,9 @@ Websocket服务器通过控制器`\websocket\controller\WebsocketServerControlle
 # Swoole环境运行
 php run websocket start
 # Docker/Podman运行Swoole镜像
-docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20461:20461 idrunk/swoole /app/run websocket start
+docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20461:20461 idrunk/swoole /app/dce websocket start
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20461:20461 idrunk/swoole /app/run websocket start
+ubuntu run podman run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20461:20461 idrunk/swoole /app/dce websocket start
 
 # 成功响应
 # Websocket server started with 0.0.0.0:20461.
@@ -77,7 +77,7 @@ ws.onmessage = msg => console.log(msg.data);
 # Swoole环境运行
 php run websocket stop
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run websocket stop
+ubuntu run podman exec server /app/dce websocket stop
 
 # 成功响应
 # Websocket server was stopped.
@@ -90,7 +90,7 @@ ubuntu run podman exec server /app/run websocket stop
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run websocket reload
+ubuntu run podman exec server /app/dce websocket reload
 
 # 成功响应
 # Websocket server was reloaded.
@@ -103,7 +103,7 @@ ubuntu run podman exec server /app/run websocket reload
 
 ```shell
 # Windows10 Wsl2 Podman运行Swoole镜像
-ubuntu run podman exec server /app/run websocket status
+ubuntu run podman exec server /app/dce websocket status
 
 # {
 #     "server": {

@@ -77,6 +77,14 @@ test(
 通过默认缓存器设置缓存
 
 
+### `->touch()`
+重置默认缓存有效时长
+
+
+### `->set()`
+通过默认缓存器设置缓存
+
+
 ### `->inc()`
 通过默认缓存器递增缓存值
 
@@ -144,6 +152,16 @@ test(
 - 参数
   - `string|array $key` 缓存键
   - `mixed $value` 缓存值
+  - `int $expiry` 有效时长
+
+- 返回`bool`
+
+
+### `->touch();`
+重置缓存有效时长
+
+- 参数
+  - `string|array $key` 缓存键
   - `int $expiry` 有效时长
 
 - 返回`bool`
