@@ -888,7 +888,7 @@ testPoint($affectedCount);
 
 - 示例
 ```php
-$result = db('tag')->query("SELECT * FROM tag WHERE id = ?", [ 1 ]);
+$result = db()->query("SELECT * FROM tag WHERE id = ?", [ 1 ]);
 testPoint($result);
 /*
 1-1    array(1) {
@@ -916,7 +916,7 @@ testPoint($result);
 
 - 示例
 ```php
-$affectedCount = db('tag')->execute("UPDATE tag set name = ? WHERE id = ?", [ '更新ID为8的name', 8 ]);
+$affectedCount = db()->execute("UPDATE tag set name = ? WHERE id = ?", [ '更新ID为8的name', 8 ]);
 testPoint($affectedCount);
 /*
 2-1    int(1)

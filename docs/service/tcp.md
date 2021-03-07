@@ -44,7 +44,7 @@ Tcp/Udp服务器通过控制器`\tcp\controller\TcpServerController`暴露接口
 
 ```shell
 # Swoole环境运行
-php run tcp start
+dce tcp start
 # Docker/Podman运行Swoole镜像
 docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20462:20462 -p 20463:20463/udp idrunk/swoole /app/dce tcp start
 # Windows10 Wsl2 Podman运行Swoole镜像
@@ -82,7 +82,7 @@ nc -u 127.0.0.1 20463
 
 ```shell
 # Swoole环境运行
-php run tcp stop
+dce tcp stop
 # Windows10 Wsl2 Podman运行Swoole镜像
 ubuntu run podman exec server /app/dce tcp stop
 
@@ -144,7 +144,7 @@ Tcp/Udp服务器类，继承于[服务器基类](/service/README.md#服务器基
 
 ### `\tcp\service\RawRequestTcp`
 
-Swoole版Tcp原始请求类，本类继承于[长连接原始请求类](/service/README.md#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Tcp请求参数的填充。
+Tcp原始请求类，本类继承于[长连接原始请求类](/service/#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Tcp请求参数的填充。
 
 你可以自定义Tcp/Udp服务器类，并定义`\dce\service\server\ServerMatrix::$rawRequestTcpClass`属性值为继承拓展此类或自定义原始请求类的类名类，以此方式实现自定义Tcp原始请求类。
 
@@ -152,7 +152,7 @@ Swoole版Tcp原始请求类，本类继承于[长连接原始请求类](/service
 
 ### `\tcp\service\RawRequestUdp`
 
-Swoole版Udp原始请求类，本类继承于[长连接原始请求类](/service/README.md#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Udp请求参数的填充。
+Udp原始请求类，本类继承于[长连接原始请求类](/service/#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Udp请求参数的填充。
 
 你可以自定义Tcp/Udp服务器类，并定义`\dce\service\server\ServerMatrix::$rawRequestUdpClass`属性值为继承拓展此类或自定义原始请求类的类名类，以此方式实现自定义Udp原始请求类。
 

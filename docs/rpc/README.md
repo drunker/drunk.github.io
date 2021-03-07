@@ -1,6 +1,6 @@
 # 远程调用
 
-DCE利用PHP的自动加载特性，实现了较为简单优雅的RPC（远程过程调用），你可以很方便的做RPC开发。RPC依赖Swoole，只能在有Swoole的常驻内存环境使用。目前RPC的支持可能还不够完善，不太建议基础弱的开发者直接商用，后续会逐步完善之。
+DCE利用PHP的自动加载特性，实现了较为简单优雅的RPC（远程过程调用），你可以很方便的做RPC开发。RPC依赖Swoole，只能在有Swoole的常驻内存环境使用。
 
 
 ## \dce\rpc\RpcServer
@@ -51,15 +51,15 @@ $server->addHost(\dce\rpc\RpcServer::host('192.168.1.10', 20466));
 预加载Rpc命名空间
 
 - 参数
+  - `string $wildcard` 名字空间通配符
   - `string $root` 名字空间下服务类根目录
-  - `string $wildcard = RpcUtility::DEFAULT_NAMESPACE_WILDCARD` 名字空间通配符
 
 - 返回`$this`
 
 - 示例
 ```php
 $server = \dce\rpc\RpcServer::new(\dce\rpc\RpcServer::host());
-$server->prepare('service/rpc/', 'rpc\\*');
+$server->prepare('rpc\\*', 'service/rpc/');
 ```
 
 
@@ -82,8 +82,7 @@ $server->preload('service/HelloRemote.php');
 启动Rpc服务
 
 - 参数
-  - `? callable $callback = null` 新进程启动回调
-  - `bool $runNewProcess = true` 是否在新建进程中启动
+  - `callable|bool $callback = true` 新进程启动回调，为布尔值时表示是否创建新进程
   - `bool $useAsyncServer = false` 是否使用异步Tcp服务
     - `true` 使用异步版Tcp
     - `false` 使用协程版Tcp
@@ -170,17 +169,17 @@ Rpc客户端类，拦截Rpc服务，发起远程调用再返回结果
 与服务端的区别是：服务端将RPC服务的名字空间注册到真实的类目录或文件，而客户端注册到回调函数，在该函数中访问服务端接口返回其结果。经过这个巧妙的小设计，让远程调用和本地调用形式完全一样，IDE的智能提示也完全可用，非常优雅。
 
 - 参数
+  - `array|string $wildcards` 远程服务名字空间通配符
   - `array $hosts` 服务主机列表（DCE会根据这些主机创建连接池，而不是直接建立连接，配有多个主机时会自动负载均衡）
     - `{host, port, token}` token不填则表示非加密API，将不传递token，此map形式会自动转为下方的数组形式
     - `[{host, port, token, max_connection}]` 主机集形式，标准形式
-  - `array $wildcards = [RpcUtility::DEFAULT_NAMESPACE_WILDCARD]` 远程服务名字空间通配符
 
 - 返回`void`
 
 - 示例
 ```php
 // 注册拦截
-RpcClient::prepare(['host' => self::LOCAL_API_HOST, 'port' => 0], ['rpc\http\*']);
+RpcClient::prepare(['rpc\http\*'], ['host' => self::LOCAL_API_HOST, 'port' => 0]);
 
 // 调用远程服务
 \rpc\http\HttpServerApi::status();
@@ -191,14 +190,14 @@ RpcClient::prepare(['host' => self::LOCAL_API_HOST, 'port' => 0], ['rpc\http\*']
 拦截rpc类，将其转到当前RPC客户端下的魔术方法处理（与`::prepare()`不同的是本方法直接拦截类名而不是命名空间）
 
 - 参数
+  - `array|string $className` 注册的需拦截类名
   - `array $hosts` 与`::prepare()`方法的该参数用法一致
-  - `string $className` 注册的需拦截类名
 
 - 返回`void`
 
 - 示例
 ```php
-RpcClient::preload($serverHosts, '\rpc\didg\IdgServerRpc');
+RpcClient::preload('\rpc\didg\IdgServerRpc', $serverHosts);
 ```
 
 
@@ -215,7 +214,7 @@ RpcClient::preload($serverHosts, '\rpc\didg\IdgServerRpc');
 - 示例
 ```php
 // 注册拦截
-RpcClient::prepare(['host' => self::LOCAL_API_HOST, 'port' => 0], ['rpc\*']);
+RpcClient::prepare(['rpc\*'], ['host' => self::LOCAL_API_HOST, 'port' => 0]);
 
 // 调用指定主机的远程服务
 $result = RpcClient::with(self::LOCAL_API_HOST, 0, fn() => \rpc\HelloRemote::hello(1, 2, 3));
@@ -280,7 +279,7 @@ RpcServer::new(RpcServer::host())
 ```php
 // [SOME_CONTROLLER->METHOD]()
 // 注册拦截
-RpcClient::prepare(['host' => '127.0.0.1', 'port' => 0], ['rpc\*']);
+RpcClient::prepare(['rpc\*'], ['host' => '127.0.0.1', 'port' => 0]);
 
 // 调用远程服务
 $result = \rpc\RemoteApi::echo(1, 2, 3);

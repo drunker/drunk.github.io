@@ -143,7 +143,7 @@ docker run --rm --name server -it -v /e/Temp/dce-app:/app -p 20460-20462:20460-2
 
 或者使用Windows 10 Wsl2 Podman
 ```shell
-docker ubuntu run podman run --rm --name server -it -v /mnt/e/Temp/dce-app:/app -p 20460-20462:20460-20462 -p 20463:20463/udp idrunk/swoole /app/dce http start
+ubuntu run podman run --rm --name server -it -v /mnt/e/Temp/dce-app:/app -p 20460-20462:20460-20462 -p 20463:20463/udp idrunk/swoole /app/dce http start
 ```
 
 然后你就可以浏览器或者curl访问应用首页了

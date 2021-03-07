@@ -150,6 +150,8 @@ module.exports = {
       {
         title: '其他',
         children: [
+          '/other/to-dce',
+          '/other/faq',
           '/other/links',
         ]
       }

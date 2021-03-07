@@ -10,12 +10,12 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
 该项目根节点配置了可隐藏路径，所以调用时可以不带根路径，如
 ```php
 // 带根路径
-php run dce sharding extend
+dce dce sharding extend
 
 // 不带根路径
-php run sharding extend
+dce sharding extend
 // 也支持路径模式
-php run sharding/extend
+dce sharding/extend
 ```
 
 
@@ -332,8 +332,8 @@ class ImController extends ViewConnection {
 服务Api，用于暴露运行服务接口，方便从程序外部维护
 
 ```bash
-php run http start
-php run http status
+dce http start
+dce http status
 ```
 
 

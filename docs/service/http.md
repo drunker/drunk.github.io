@@ -46,7 +46,7 @@ HTTP服务器通过控制器`\http\controller\HttpServerController`暴露接口�
 
 ```shell
 # Swoole环境运行
-php run http start
+dce http start
 # Docker/Podman运行Swoole镜像
 docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20460:20460 idrunk/swoole /app/dce http start
 # Windows10 Wsl2 Podman运行Swoole镜像
@@ -95,7 +95,7 @@ return [
 
 ```shell
 # Swoole环境运行
-php run http stop
+dce http stop
 # Windows10 Wsl2 Podman运行Swoole镜像
 ubuntu run podman exec server /app/dce http stop
 

@@ -45,7 +45,7 @@ Websocket服务器通过控制器`\websocket\controller\WebsocketServerControlle
 
 ```shell
 # Swoole环境运行
-php run websocket start
+dce websocket start
 # Docker/Podman运行Swoole镜像
 docker run --rm --name server -it -v /mnt/f/App/Mine/dce/backend/dce/:/app/ -p 20461:20461 idrunk/swoole /app/dce websocket start
 # Windows10 Wsl2 Podman运行Swoole镜像
@@ -75,7 +75,7 @@ ws.onmessage = msg => console.log(msg.data);
 
 ```shell
 # Swoole环境运行
-php run websocket stop
+dce websocket stop
 # Windows10 Wsl2 Podman运行Swoole镜像
 ubuntu run podman exec server /app/dce websocket stop
 
@@ -158,7 +158,7 @@ Websocket服务器类，继承于[服务器基类](/service/README.md#服务器�
 
 ### `\websocket\service\RawRequestWebsocket`
 
-Swoole版Websocket原始请求类，本类继承于[长连接原始请求类](/request/raw.md#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Websocket请求参数的填充。
+Websocket原始请求类，本类继承于[长连接原始请求类](/service/#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Websocket请求参数的填充。
 
 你可以自定义Websocket服务器类，并定义`\websocket\service\WebsocketServer::$rawRequestWebsocketClass`属性值为继承拓展此类或自定义原始请求类的类名类，以此方式实现自定义Websocket原始请求类。
 

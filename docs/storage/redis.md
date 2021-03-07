@@ -3,6 +3,53 @@
 Redis库依赖phpredis扩展
 
 
+## \dce\storage\redis\DceRedis
+
+Redis静态工具类
+
+
+### `::isAvailable()`
+判断Redis是否可用（仅判断是否有配置Redis，不做主机是否可连接之类的真正判断）
+
+- 返回`bool`
+
+- 示例
+```php
+if (\dce\storage\redis\DceRedis::isAvailable()) {
+    // 使用Redis IO
+} else {
+    // 使用文件或其他IO
+}
+```
+
+
+### `::get()`
+取Redis实例，必须与`::put()`成对调用（本方法自动根据环境判定从实例池取还是新建连接，所有需要Redis对象的地方都应该用本方法获取）
+
+- 参数
+  - `int $index = -1` 目标库号，-1表示以`Dce::$config->redis['index']`为准
+  - `bool $noSerialize = false` 是否不自动序列化储存（Dce为了方便存储各种类型的数据，默认开启了自动序列化，你可以通过该参数强制不自动序列化）
+
+- 返回`\Redis`
+
+- 示例
+```php
+$redis = DceRedis::get();
+$redis->set('homepage', 'https://drunkce.com');
+DceRedis::put($redis);
+```
+
+
+### `::put()`
+尝试将实例归还连接池并还原Redis设置
+
+- 参数
+  - `\Redis` Redis实例
+
+- 返回`void`
+
+
+
 ## \dce\storage\redis\RedisConnector
 
 Redis连接器

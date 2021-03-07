@@ -107,7 +107,7 @@ Url工具类
 
 
 ### `::argumentDecode()`
-参数安全解码（参数值中若有参数分隔符则可能影响路由，所以make时需编码，提取后续解码）
+参数安全解码（参数值中若有参数分隔符则可能影响路由，所以make时需编码，提取后需解码）
 
 - 参数
   - `string $argument` 参数值
@@ -117,7 +117,7 @@ Url工具类
 - 示例
 ```php
 $arg = "no%2D1%2E1";
-$argDecoded = \dce\project\request\Url::argumentDecode();
+$argDecoded = \dce\project\request\Url::argumentDecode($arg);
 test($argDecoded);
 // no-1.1
 ```

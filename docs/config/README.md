@@ -17,20 +17,20 @@ return [
 
 ## \dce\config\DceConfig
 
-DCE配置类
+DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有效，无法在项目中覆盖配置）
 
 
 ### `->appId`
-`string` 应用ID。用于多个应用部署于同一台机器时区分他们，若未定义则会自动生成。
+`string` **`c`** 应用ID。用于多个应用部署于同一台机器时区分他们，若未定义则会自动生成。
 
 ### `->bootstarp`
-`Closure|null` 引导回调。可以在此做全局初始化工作, 如设置池通道, 设置数据库代理等。
+`Closure|null` **`c`** 引导回调。可以在此做全局初始化工作, 如设置池通道, 设置数据库代理等。
 
 ### `->prepare`
 `Closure|null` 项目预备回调。可以做项目初始化相关工作，（在cli型应用中，只会在第一次访问项目前执行该方法）。
 
 ### `->projectPaths`
-`array|null` 扩展项目路径。若某些项目不在默认项目根目录下，可以通过此配置单独指定。若以斜杠结尾, 视为根目录, 将扫描其下全部目录作为自定义项目；无斜杠, 则作为一个单独的自定义项目，如：
+`array|null` **`c`** 扩展项目路径。若某些项目不在默认项目根目录下，可以通过此配置单独指定。若以斜杠结尾, 视为根目录, 将扫描其下全部目录作为自定义项目；无斜杠, 则作为一个单独的自定义项目，如：
 ```php
 'project_paths' => [
     '../other_projects/',
@@ -45,10 +45,10 @@ DCE配置类
 `string` jsonp请求时的回调方法键名。默认为`callback`。
 
 ### `->lockClass`
-`string` 继承自`\dce\base\Lock`的并发锁类名（Dce初始化时会实例化该类绑定到`\dce\Dce::$lock`属性上）
+`string` **`c`** 继承自`\dce\base\Lock`的并发锁类名（Dce初始化时会实例化该类绑定到`\dce\Dce::$lock`属性上）
 
 ### `->idGenerator`
-`\dce\sharding\id_generator\DceIdGenerator` Id生成器，Dce会自动将数组型配置转换为DceIdGenerator对象
+`\dce\sharding\id_generator\DceIdGenerator` **`c`** Id生成器，Dce会自动将数组型配置转换为DceIdGenerator对象
 ```php
 // 默认配置（由于Dce的惰性实例化配置类属性的机制，仅当属性有对应的配置时才会被实例化，所以你如果没有独立配置，则不会自动实例化idGenerator属性）
 'id_generator' => [
@@ -58,6 +58,7 @@ DCE配置类
     ],
     'client_storage' => '\dce\sharding\id_generator\bridge\IdgStorageFile', // 客户端储存器，若为Rpc客户端，则将自动以该储存器在新进程创建客户端Rpc服务
     'client_storage_arg' => APP_RUNTIME . 'didg/', // 客户端储存器实例化参数
+    'redis_index' => null, // Redis储存器数据库号
     'requester' => null, // ID生成器服务请求器
     'server_rpc_hosts' => [], // RPC服务端主机，若配置了则为远程服务端
     'server_storage' => '\dce\sharding\id_generator\bridge\IdgStorageFile', // 服务端储存器，若为Rpc服务端，则将自动以该储存器在新进程创建服务端Rpc服务
@@ -75,7 +76,7 @@ DCE配置类
 ```
 
 ### `->cache`
-`array` 系统缓存配置。此项为公共配置，不支持在项目下单独配置。具体配置项如下：
+`array` **`c`** 系统缓存配置。此项为公共配置，不支持在项目下单独配置。具体配置项如下：
 ```php
 'cache' => [
     'default' => 'file', // 默认缓存器名 (file, redis, memcache, memcached)
@@ -83,29 +84,34 @@ DCE配置类
         'dir' => APP_RUNTIME .'cache/', // 文件缓存目录
         'template_dir' => APP_RUNTIME . 'tpl/', // PHP模板文件缓存目录
     ],
-    // 'memcache' => [
+    'memcache' => [
     //     'host' => '', // 缓存服务器
     //     'port' => 0, // 缓存服务端口
-    //     'backup_on' => false, // 是否备份
-    // ],
-    // 'memcached' => [
+        'backup_on' => false, // 是否备份
+    ],
+    'memcached' => [
     //     'host' => '', // 缓存服务器
     //     'port' => 0, // 缓存服务端口
-    //     'backup_on' => false, // 是否备份
-    // ],
+        'backup_on' => false, // 是否备份
+    ],
+    'redis' => [
+        'index' => 0, // Redis缓存数据库号
+    ],
 ],
 ```
 
 ### `->session`
-`array` Session配置。默认值如下：
+`array` **`c`** Session配置。默认值如下：
 ```php
 'session' => [
     'name' => 'dcesid', // Session ID名
-    'auto_start' => 0, // 是否自动启动（默认不自启）
+    'auto_open' => 0, // 是否自动启动（默认不自启）
     'ttl' => 3600, // Session存活时间
-    'root' => APP_RUNTIME . 'session/', // 文件型Session处理器根目录或RedisSession处理器库号（库号暂未启用）
-    'class' => '\dce\project\request\SessionFile', // Session处理器类名（默认文件型）
-    // 'class' => '\dce\project\request\SessionRedis', // 系统内置了Redis型，可在common/config.php中配置启用
+    'class' => '', // 未指定Session类则Dce自行选择
+    'root' => APP_RUNTIME . 'session/', // 文件型Session处理器根目录
+    'index' => 0, // RedisSession处理器库号
+    'manager_class' => '', // 留空表示Dce执行选择SessionManager类
+    'manager_index' => 0, // SessionManagerRedis库号
 ],
 ```
 
@@ -113,7 +119,7 @@ DCE配置类
 `string[]` 需内置Http服务忽略的请求路径。默认为`['/favicon.ico',]`。
 
 ### `->redis`
-`array` Redis配置。格式如下：
+`array` **`c`** Redis配置。格式如下：
 ```php
 'redis' => [
     'host' => '127.0.0.1',
@@ -124,7 +130,7 @@ DCE配置类
 ```
 
 ### `->mysql`
-`\dce\database\connector\MysqlConfig` Mysql配置，Dce会将自动将其转换为MysqlConfig对象。格式如下：
+`\dce\database\connector\MysqlConfig` **`c`** Mysql配置，Dce会将自动将其转换为MysqlConfig对象。格式如下：
 ```php
 // 单库版
 'mysql' => [
@@ -169,7 +175,7 @@ DCE配置类
 ```
 
 ### `->sharding`
-`\dce\database\middleware\ShardingConfig` 分库规则配置。若无需分库查询支持则无需配置，格式如下：
+`\dce\database\middleware\ShardingConfig` **`c`** 分库规则配置。若无需分库查询支持则无需配置，格式如下：
 ```php
 'sharding' => [
     'member' => [ // 分库别名 (按member划分的分库配置)
@@ -212,7 +218,7 @@ DCE配置类
 ```
 
 ### `->shardingExtend`
-`array` 内置分库拓库工具配置。若无需拓库，或无需使用内置拓库脚本，则无需配置。格式如下：
+`array` **`c`** 内置分库拓库工具配置。若无需拓库，或无需使用内置拓库脚本，则无需配置。格式如下：
 ```php
 'sharding_extend' => [
     'volume_per_transfer' => 1000, // 每次向扩展表平均迁移量
@@ -238,7 +244,7 @@ DCE配置类
 ```
 
 ### `->rpcServers`
-`array` Rpc服务配置。设置后在应用启动时, 将会自动启动Rpc服务监听, 并拦截处理Rpc请求方法。格式如下：
+`array` **`c`** Rpc服务配置。设置后在应用启动时, 将会自动启动Rpc服务监听, 并拦截处理Rpc请求方法。格式如下：
 ```php
 'rpc_servers' => [
     [
@@ -294,8 +300,11 @@ DCE配置类
 ### `->swooleTcp`
 `array` Swoole\Tcp\Server原生配置，详细请移步至Swoole官方wiki查看。
 
+### `->serverApiAuthMapping`
+`array` 服务器接口授权密匙表，格式为`[host:port => password]`。
+
 ### `->iniSet`
-`array` 该配置将在引导时自动遍历作为参数给ini_set()调用
+`array` **`c`** 该配置将在引导时自动遍历作为参数给ini_set()调用
 ```php
 'ini_set' => [
     'date.timezone' => 'PRC',
