@@ -3,23 +3,6 @@
 Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框架中的[项目](/request/project.md)，根路径为`project`。这些项目下封装了些内置服务与工具，它们大多以命令行接口暴露，本组章节将介绍它们的使用方法。
 
 
-## 综合工具
-
-综合工具封装在内置项目中的`project/dce`项目中，该项目用于集成一些命令行小工具，目前仅集成了[分库拓库工具](/sharding/extend.md)，后续可能会集成更多。
-
-该项目根节点配置了可隐藏路径，所以调用时可以不带根路径，如
-```php
-// 带根路径
-dce dce sharding extend
-
-// 不带根路径
-dce sharding extend
-// 也支持路径模式
-dce sharding/extend
-```
-
-
-
 ## 服务器基类
 
 服务基类是为Dce内置服务封装的抽象类，主要为内置服务抽象或实现了RCR架构化。
@@ -203,12 +186,6 @@ dce sharding/extend
 - 返回`bool`
 
 
-#### `->getSessionManager()`
-取绑定的SessionManager
-
-- 返回`\dce\project\request\SessionManager`
-
-
 #### `->runApiService()`
 启动服务器Api服务（自调用）
 
@@ -243,12 +220,6 @@ dce sharding/extend
 取Server实例
 
 - 返回`\Swoole\Server`
-
-
-#### `->runApiService();`
-启动服务接口服务
-
-- 返回`void`
 
 
 
@@ -326,7 +297,6 @@ class ImController extends ViewConnection {
 ```
 
 
-
 ### `\dce\service\server\ServerApi`
 
 服务Api，用于暴露运行服务接口，方便从程序外部维护
@@ -335,9 +305,3 @@ class ImController extends ViewConnection {
 dce http start
 dce http status
 ```
-
-
-
-### `\dce\service\server\SessionManagerNoop`
-
-空的`\dce\project\request\SessionManager`，方便实现标准化编程（统一处理有无Session管理器的情况）

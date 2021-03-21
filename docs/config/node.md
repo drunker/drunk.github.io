@@ -2,7 +2,9 @@
 
 DCE定义了节点的概念，所谓节点，简单来说就是一个请求路径与控制器方法的映射关系，收到用户请求后，DCE会找到请求地址对应的路由方法，执行并返回结果。
 
-节点配置于对应项目下的config/nodes.php，以数组的形式定义配置项，配置项数组下标皆以蛇底形式书写，DCE载入配置后，会自动转为小驼峰式的节点对象属性。下述为一个示例节点配置文件：
+节点配置会被缓存，Dce启动时会扫描项目下的节点文件，如果文件有改动则从配置文件取节点，否则直接用缓存。你也可以开启[节点缓存配置](/config/#node)来强制使用节点缓存，但这种形式下节点配置改动时缓存不会自动更新，需要你手动清除缓存来自动重建缓存。
+
+节点配置于对应项目下的`config/nodes.php`，以数组的形式定义配置项，配置项数组下标皆以蛇底形式书写，DCE载入配置后，会自动转为小驼峰式的节点对象属性。下述为一个示例节点配置文件：
 
 ```php
 <?php
@@ -19,6 +21,70 @@ return [
     ],
 ];
 ```
+
+
+## 注解式节点
+
+注解式节点是指可以在控制器方法中配置节点，这种方式可以让你编写接口更加便捷直观，可以省略控制器相关配置项。但注解式节点需要通过扫描全部控制器文件（[默认最深4层](/config/#node)）来解析，如果你是Cgi式应用，每次请求都会扫描解析全部控制器方法，比较浪费IO，你可以在生产环境开启[节点缓存配置](/config/#node)来提升性能。如果你是常驻内存服务的应用，则无需担心IO浪费，因为Dce仅在载入时（服务启动前）会扫描节点。
+
+Dce未在项目下找到`config/nodes.php`文件时，则视其为注解式节点项目，会扫描控制器方法的注解来解析节点配置。下面时一个注解节点配置示例：
+
+```php
+<?php
+namespace app\controller;
+// 从名字空间可以看出当前控制器所属一个叫 app 的项目
+
+use dce\project\node\Node; // 引入注解式节点配置类
+use dce\project\request\Request;
+use dce\project\view\ViewCli;
+
+class TestController extends ViewCli {
+    #[Node('app', omissiblePath: true)] // 配置可可省略项目级"app"路径 (凡是以 __ 开头的方法, Dce不会当其为控制器方法, 即在该方法的注解配置的节点未指定控制器方法)
+    public function __construct(Request $request) {
+        parent::__construct($request);
+    }
+
+    #[Node] 
+    // 配置路径, 并未配置控制器, 因为Dce能自动解析对应控制器方法. 
+    // 另外你也会发现未配置"methods", 因为当前控制器继承了 ViewCli, Dce能以此推断出你的请求方式为 cli, 但HTTP接口则需你手动指定, Dce无法得知你接口是 post/get 或其他
+    public function index() {
+        $this->print('哈哈');
+    }
+
+    #[Node(extra: ['a' => '哈哈'])] // 配置了扩展属性, 你可以以此做一些特殊的工作, 如鉴权
+    public function test() {
+        $this->print($this->request->node->extra);
+    }
+}
+```
+
+
+### 注解式节点参数
+*参数名与配置相对应，可以点击跳转到对应配置项的说明*
+
+[`string|null $path = null`](#path)节点路径（若未指定，则将以方法名的蛇底形式作为当前节点路径，否则直接使用指定的路径。若控制器处于子级目录中，则以其所有父目录作为父路径。）  
+[`string|array|null $methods = null`](#methods)  
+[`string|null $id = null`](#id)  
+[`string|null $name = null`](#name)  
+[`bool|null $enableCoroutine = null`](#enablecoroutine)  
+[`bool|null $hookCoroutine = null`](#hookcoroutine)  
+[`string|null $phpTemplate = null`](#phptemplate)  
+[`string|null $templateLayout = null`](#templateLayout)  
+[`array|null $corsOrigins = null`](#corsorigins)  
+[`array|null $projectHosts = null`](#projecthosts)  
+[`int|null $apiCache = null`](#apicache)  
+[`bool|null $omissiblePath = null`](#omissiblepath)  
+[`array|null $urlArguments = null`](#urlarguments)  
+[`bool|null $urlPlaceholder = null`](#urlplaceholder)  
+[`array|null $urlSuffix = null`](#urlsuffix)  
+[`bool|null $lazyMatch = null`](#lazymatch)  
+[`string|null $http301 = null`](#http301)  
+[`string|null $http302 = null`](#http302)  
+[`string|null $jsonpCallback = null`](#jsonpcallback)  
+[`array|null $extra = null`](#extra)
+`bool $controllerPath = false` 是否为控制器级路径（若设为真，则作为控制器级节点，该节点将作为该控制器下所有节点的父节点）
+
+
 
 ## \dce\project\node\Node
 
@@ -107,14 +173,23 @@ websocket | Websocket请求
 2 | 缓存Html模板 | 不论模板是否被修改，直接取缓存渲染直到缓存失效
 4 | 缓存Html页面 | 缓存最终的渲染内容，下次进入若Api数据无变化，则直接输出缓存，除非无缓存或已失效
 
+### `->omissiblePath`
+`bool` 当前节点路径是否可省略。
+
+```php
+'omissible_path' => false,
+// 不可省略时可能得这么访问 /home/gallery/
+'omissible_path' => true,
+// 可省略时允许这么访问 /gallery/，使用Url类生成的url也会自动省略对应节点的路径部分
+```
+
 ### `->urlArguments`
 `NodeArgument[]` Url参数配置集（Url参数指伪装在Url路径部分的参数、伪静态地址中的参数，如 `/news/1.html`中，其实含有参数`id = 1`），以纯数组配置，DCE会将其转为对象数组。
 
 ```php
 // 下述配置可以通过 \dce\project\request\Url::make() 生成伪静态地址，用户请求该伪静态地址时，也能正确的匹配到对应的节点并解析出伪装的参数
 'url_arguments' => [
-  'name' => 'id',
-  'match' => '/^\d+$/',
+    ['name' => 'id', 'match' => '/^\d+$/',]
 ],
 ```
 
@@ -126,16 +201,6 @@ websocket | Websocket请求
 // 假设有四个参数三个未传，则设false时可能是这样 /news/1.html
 'url_placeholder' => true,
 // 设true时是这样 /news/1---.html
-```
-
-### `->urlPathHidden`
-`bool` 是否隐藏当前节点路径。
-
-```php
-'url_path_hidden' => false,
-// 不隐藏时可能得这么访问 /home/gallery/
-'url_path_hidden' => true,
-// 隐藏时允许这么访问 /gallery/，使用Url类生成的url也会自动省略对应节点的路径部分
 ```
 
 ### `->urlSuffix`

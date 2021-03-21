@@ -145,12 +145,13 @@ module.exports = {
           '/service/http',
           '/service/websocket',
           '/service/tcp',
+          '/service/utility',
         ]
       },
       {
         title: '其他',
         children: [
-          '/other/to-dce',
+          '/other/attention',
           '/other/faq',
           '/other/links',
         ]

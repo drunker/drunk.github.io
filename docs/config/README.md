@@ -38,6 +38,15 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 ],
 ```
 
+### `->node`
+`array` **`c`** 节点配置
+```php
+'node' => [
+    'cache' => false, // 是否缓存节点, 建议注解式节点的Cgi应用在生产环境中开启, 但节点改动时需清除一次缓存
+    'deep' => 4, // 控制器注解式节点扫描深度
+],
+```
+
 ### `->rewriteMode`
 `bool` 是否重写模式。用于使用url生成函数生成伪静态Url（如`Url::make('home/news', ['id'=>1])`可通过node配置生成，真：`/news/1.html`；假：`/?/news/1.html`），默认为假。
 
@@ -185,7 +194,7 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
         'allow_joint' => true, // 是否允许联表查询 (连表查询仅能联合主表所在的库来查询, 此开关可以关闭或开启该特性支持来避免开发人员的错误用法)
         'table' => [ // 适用于该分库规则的表名
             'member' => [
-                'id_column' => 'mid', // 未配置sharding_column时将以id_column作为分库字段
+                'id_column' => 'mid', // 未配置sharding_column时将以id_column作为分库字段, 如果ID生成器tag名与字段名不一致, 则可以以数组的形式配置字段与tag, 如 ['name' => 'mid', 'tag' => 'mid'], sharding_column 亦如此
             ],
             'member_login' => [
                 'id_column' => 'id', // 若配置了ID字段, 则将使用生成器生成ID, 若同时配置了sharding_column, 则该字段将作为ID的基因字段
@@ -317,6 +326,14 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 'debug' => [
     'file_root' => APP_RUNTIME . 'log/debug/', // 默认Debug日志文件储存根目录
     'url_root' => 'https://logger.drunkce.com/debug/', // 默认Debug日志HTTP储存根地址
+],
+```
+
+### `->log`
+`array` 日志记录器配置
+```php
+'db' => [ // 数据库日志
+    'console' => false, // 是否在控制台输出日志
 ],
 ```
 

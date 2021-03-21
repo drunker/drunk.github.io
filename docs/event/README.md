@@ -30,8 +30,11 @@ Event::trigger('my_event', [3, 4]);
 ### `::BEFORE_CONTROLLER`
 `string` 进入控制器前回调 `@callable(Request)`
 
-### `::AFTER_RESPONSE`
-`string` 响应结束回调 `@callable(Request, View)`
+### `::ENTERING_CONTROLLER`
+`string` 进入控制器时回调（控制器实例化后触发） `@callable(View)`
+
+### `::AFTER_CONTROLLER`
+`string` 控制器执行完毕回调 `@callable(View)`
 
 
 ### `::on()`

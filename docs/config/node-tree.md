@@ -22,7 +22,7 @@
 `\dce\project\node\Node[]` 一个路径可能匹配不同的节点, 所以将节点按路径分组, (如将/edit同时用于添加编辑)
 
 ### `->hiddenChildren`
-`\dce\project\node\NodeTree[]` 隐藏路径子树集
+`\dce\project\node\NodeTree[]` 可省略路径子树集
 
 
 ### `->addNode()`

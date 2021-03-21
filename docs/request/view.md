@@ -12,6 +12,10 @@ DCE的视图不只是传统意义上的HTTP响应数据渲染器，而是对所�
 `\dce\project\request\Request` 请求对象
 
 
+### `->rawRequest`
+`\dce\project\request\RawRequest` 原始请求对象
+
+
 ### `__construct()`
 构造函数，做了些如请求对象属性赋值的初始化工作，控制器类若需要定义构造函数，请务必在内部先调用父类构造方法。
 

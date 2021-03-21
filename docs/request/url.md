@@ -29,12 +29,12 @@ Url工具类
   // /?/home/news&id=1
   ```
 
-  - 隐藏路径
+  - 可省略路径
   ```php
   // nodes.php
   [
     'path' => 'home',
-    'url_path_hidden' => true,
+    'omissible_path' => true,
   ],
   [
     'path' => 'home/news/detail',
@@ -51,11 +51,11 @@ Url工具类
   // nodes.php
   [
     'path' => 'home',
-    'url_path_hidden' => true,
+    'omissible_path' => true,
   ],
   [
     'path' => 'news/detail',
-    'url_path_hidden' => true,
+    'omissible_path' => true,
     'url_arguments' => [
       [
         'name' => 'id',
@@ -80,11 +80,11 @@ Url工具类
   // nodes.php
   [
     'path' => 'home',
-    'url_path_hidden' => true,
+    'omissible_path' => true,
   ],
   [
     'path' => 'news/detail',
-    'url_path_hidden' => true,
+    'omissible_path' => true,
     'url_arguments' => [
       [
         'name' => 'id',

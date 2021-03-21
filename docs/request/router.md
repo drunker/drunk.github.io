@@ -15,3 +15,9 @@
 取提取出的get参数字典
 
 - 返回`array`
+
+
+### `->getComponentsRemaining()`
+取惰性匹配时剩余未处理的组件
+
+- 返回`array`

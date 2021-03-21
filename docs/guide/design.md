@@ -47,6 +47,7 @@ Dce的开源项目分为应用项目[idrunk/dce-app](https://github.com/idrunk/d
 [ROOT]                          应用根目录（可在入口文件中定义APP_ROOT常量自定义）
 ├─drunk                         内置公共类库
 ├─engine                        框架核心类库
+│  ├─run.php                    Dce入口文件
 ├─function                      公共方法目录
 ├─project                       内置项目
 │  ├─dce                        内置综合工具
@@ -55,7 +56,6 @@ Dce的开源项目分为应用项目[idrunk/dce-app](https://github.com/idrunk/d
 │  ├─websocket                  内置Websocket服务
 ├─vendor                        Composer库目录
 ├─composer.json                 Composer配置
-├─dce.php                       Dce入口文件
 ├─LICENSE                       授权文件
 ├─README.md                     说明文件
 ```
