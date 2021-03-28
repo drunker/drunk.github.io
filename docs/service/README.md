@@ -266,37 +266,6 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
 
 
 
-### `\dce\service\server\ViewConnection`
-
-长连接型视图器（长连接型接口控制器继承此视图方便回发数据等）
-
-
-#### `->rawRequest`
-`\dce\service\server\RawRequestConnection` 原始请求实例
-
-#### `->response()`
-响应客户端，回发数据
-
-- 参数
-  - `string|false|null $path = null` 请求路径
-    - `string` 指定路径
-    - `false` 不设置
-    - `null` 取`$rawRequest->path`
-
-- 返回`mixed`
-
-- 示例
-```php
-class ImController extends ViewConnection {
-    public function reply() {
-        $this->assign('msg', 'Hello world !');
-        // 向请求发起端回发信息
-        $this->response();
-    }
-}
-```
-
-
 ### `\dce\service\server\ServerApi`
 
 服务Api，用于暴露运行服务接口，方便从程序外部维护

@@ -6,7 +6,10 @@
 
 ### Linux命令行工具`dce`无法正常执行
 
-如果你的代码是在Windows下通过`git`拉取或者用`composer create-project`获取，然后将该项目传到Linux服务器的，则此时的`dce`工具文件可能无法以shell脚本执行。因为git工具在windows下拉取代码时，会自动将换行符由`\n`修改为`\r\n`，而`\r`在linux下会被当做普通字符而非换行符，导致被当做异常脚本而无法执行，这种情况下你可以用`notpad++`类的文本编辑器，搜索`\r`将其替换为空而删掉即可。
+如果你的代码是在Windows下通过`git`拉取或者用`composer create-project`获取，然后将该项目传到Linux服务器的，则此时的`dce`工具文件可能无法以shell脚本执行。因为git工具在windows下拉取代码时，会自动将换行符由`\n`修改为`\r\n`，而`\r`在linux下会被当做普通字符而非换行符，导致被当做异常脚本而无法执行，这种情况下提供两种解决方式：
+
+1. 可以用`notpad++`类的文本编辑器，搜索`\r`将其替换为空而删掉即可。
+2. 将`dce`当作PHP脚本执行（即在前加PHP，直接让PHP执行dce：`php dce`）而非作为可执行工具直接执行
 
 
 ### Windows命令行工具`dce.bat`无法正常执行

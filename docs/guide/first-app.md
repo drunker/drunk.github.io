@@ -1,6 +1,6 @@
 # 第一个应用
 
-作者创建了专门的使用示例项目，里面编写了几乎Dce的全部功能特性的使用示例，推荐你拉取该项目查看源码及尝试运行，可能会加深你的理解让你更快上手。你可以点击这里[使用composer拉取](./get.md#初始化一个dce应用环境)，或者去[Github拉取](../other/links.md#dce使用示例分支)。
+作者创建了专门的使用示例项目，里面编写了Dce的几乎全部功能特性的使用示例，建议你拉取该项目查看源码及尝试运行，会加深你的理解让你更快上手。你可以点击这里[使用composer拉取](./get.md#初始化一个dce应用环境)，或者去[Github拉取](../other/links.md#dce使用示例分支)。
 
 
 ## Cgi网页版Hello World
@@ -9,7 +9,7 @@
 
 1. 在项目根目录下建立一个hello目录
 
-2. 在新建hello目录下建立config、controller、view目录
+2. 在新建hello目录下建立config、controller、template目录
 
 此时的项目目录结构如下:
 
@@ -18,10 +18,14 @@
 │  ├─hello                      自定义的名为hello的项目
 │  │  ├─config                  项目配置目录
 │  │  ├─controller              项目控制器目录
-│  │  ├─view                    项目视图目录
+│  │  ├─template                渲染模板目录
 ```
 
 ### 配置节点
+
+::: tip 提示
+4.2.1新增注解式节点支持，可以更方便的编写接口，[点击查看详情](../config/node.md#注解式节点)
+:::
 
 1. 在项目配置目录下建立nodes.php
 
@@ -45,9 +49,9 @@ return [
 ``` php
 namespace hello\controller;
 
-use dce\project\view\engine\ViewHttpJson;
+use dce\project\Controller;
 
-class DefaultController extends ViewHttpJson {
+class DefaultController extends Controller {
     public function index() {
         $this->assign("message", "Hello World !");
     }
@@ -66,37 +70,21 @@ class DefaultController extends ViewHttpJson {
 
 ### 新建布局视图
 
-上面的例子，我们响应的json，是一个接口型页面。Dce当然也支持响应传统的Html页面，按下述步骤可以建立一个Html页面。
+上面的例子，默认响应的json，是一个接口型页面。Dce当然也支持响应传统的Html页面，按下述步骤可以建立一个Html页面。
 
-1. 将 [新建控制器](./#新建控制器) 中继承的父类改为`ViewHttpHtml`
-
-``` php
-namespace hello\controller;
-
-// use dce\project\view\engine\ViewHttpJson;
-use dce\project\view\engine\ViewHttpHtml;
-
-// class DefaultController extends ViewHttpJson {
-class DefaultController extends ViewHttpHtml {
-    public function index() {
-        $this->assign("message", "Hello World !");
-    }
-}
-```
-
-2. 修改nodes.php配置，指定模版文件路径
+1. 修改nodes.php配置，指定模版文件路径
 
 ``` php {5}
 return [
     [
         'path' => 'hello',
         'controller' => 'DefaultController->index',
-        'php_template' => 'index.php',
+        'render' => 'index.php',
     ],
 ];
 ```
 
-3. 在view中建立模板文件index.php并填充为以下内容
+2. 在template中建立模板文件index.php并填充为以下内容
 
 ``` php
 <!doctype html>
@@ -111,13 +99,13 @@ return [
 </html>
 ```
 
-4. 刷新之前的部署地址，看到如下内容，则表示你的Html页面创建成功
+3. 刷新之前的部署地址，看到如下内容，则表示你的Html页面创建成功
 
 ```
 控制器映射的变量$message的值为: Hello World !
 ```
 
-5. 最终目录结构
+4. 最终目录结构
 
 ```
 ├─project                           项目根目录
@@ -126,7 +114,7 @@ return [
 │  │  │  ├─nodes.php                项目节点配置
 │  │  ├─controller                  项目控制器目录
 │  │  │  ├─DefaultController.php    自定义控制器
-│  │  ├─view                        项目视图目录
+│  │  ├─template                    渲染模板目录
 │  │  │  ├─index.php                自定义Html模板
 ```
 
@@ -137,7 +125,7 @@ return [
 ### 配置节点
 
 ``` php {2}
-return [
+[
     'methods' => 'cli', // 属性的详细说明参见节点章
     'path' => 'hello/cli',
     'controller' => 'CliController->index',
@@ -152,9 +140,9 @@ return [
 ``` php
 namespace hello\controller;
 
-use dce\project\view\ViewCli;
+use dce\project\Controller;
 
-class CliController extends ViewCli {
+class CliController extends Controller {
     public function index() {
         $this->print("Hello World !");
     }
@@ -194,9 +182,9 @@ Dce内置了Http服务器，是基于Swoole的Http Server封装开发的，Swool
 dce http start
 ```
 
-3. 访问之前的定义的接口：http://127.0.0.1:20460/?/hello（默认HttpServer端口为20460，可以通过`common/config/http.php`自定义，详细参见 [内置Http服务](/service/http.md) 篇）
+3. 访问之前定义的接口：http://127.0.0.1:20460/?/hello（默认HttpServer端口为20460，可以通过`common/config/http.php`自定义，详细参见 [内置Http服务](/service/http.md) 篇）
 
-4. 看到响应"Hello World !"表示Http服务正常启动成功
+4. 看到响应"Hello World !"表示Http服务器正常
 
 ## Websocket服务器
 
@@ -217,12 +205,12 @@ Websocket也是以[内置项目](/service/websocket.md)的形式封装的，Dce�
 ``` php
 namespace hello\controller;
 
-use dce\server\ViewConnection;
+use dce\project\Controller;
 
-class WebsocketController extends ViewConnection {
+class WebsocketController extends Controller {
     public function index() {
         $this->assign("message", "Server received: {$this->request->rawData}");
-        $this->response('client/path');
+        $this->response();
     }
 }
 ```
@@ -249,7 +237,7 @@ ws.onmessage = (evt) => {
 5. 若看到打印的下述数据，则表示发送接收成功。（经历了连接-客户端发送-服务端接收-服务端解包-服务端定位并执行控制器-服务端打包-服务端发送-客户端接收这些过程）
 
 ```
-Received data from server: client/path
+Received data from server: hello/websocket
 {"data":{"message":"Server received: Data from client"}}
 ```
 
@@ -274,12 +262,12 @@ Tcp的封装与Websocket的非常相似，Dce完全接管了receive事件，打�
 ``` php
 namespace hello\controller;
 
-use dce\server\ViewConnection;
+use dce\project\Controller;
 
-class TcpController extends ViewConnection {
+class TcpController extends Controller {
     public function index() {
         $this->assign("message", "Server received: {$this->request->rawData}");
-        $this->response("client/path");
+        $this->response();
     }
 }
 ```
@@ -308,10 +296,10 @@ Udp data from client
 
 ```
 # Tcp通信成功响应
-client/path
+hello/tcp
 {"data":{"message":"Server received: Tcp data from client\n"}}
 
 # Udp通信成功响应
-client/path
+hello/tcp
 {"data":{"message":"Server received: Udp data from client\n"}}
 ```

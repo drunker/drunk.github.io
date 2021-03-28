@@ -25,7 +25,7 @@ Dce的开源项目分为应用项目[idrunk/dce-app](https://github.com/idrunk/d
 │  │  ├─controller              项目控制器目录
 │  │  ├─service                 项目服务类库目录
 │  │  ├─model                   项目模型目录
-│  │  ├─view                    项目视图目录
+│  │  ├─template                渲染模板目录
 ├─runtime                       运行时目录（可在入口文件中定义APP_RUNTIME常量自定义）
 │  ├─cache                      File缓存目录
 │  ├─tpl                        编译模板缓存目录

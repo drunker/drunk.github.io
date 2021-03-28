@@ -1,6 +1,6 @@
 # Websocket服务器
 
-Dce以内置项目的形式封装了Websocket服务器，项目位于`project/websocket`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\WebSocket\Server](/other/links.md#Websocket服务器)，你必须在Swoole环境才能开启此服务器。
+Dce以内置项目的形式封装了Websocket服务器，项目位于`project/websocket`目录下，支持自定义配置、扩展等。该服务依赖于[\Swoole\WebSocket\Server](/other/links.md#websocket服务器)，你必须在Swoole环境才能开启此服务器。
 
 Websocket服务器能同时方便的提供HTTP、Tcp/Udp服务支持，所以如果你需要这些服务，实例化一个Websocket服务器即可。
 

@@ -31,7 +31,7 @@ return [
 ];
 ```
 
-上述的`swoole_http`配置为[Swoole\Http\Server](/other/links.md#Http服务器)的原生配置项，如开启SSL等，都是通过该配置实现，该配置选项众多，你可以到[Swoole官网](/other/links.md#Http服务器)查看详情。
+上述的`swoole_http`配置为[Swoole\Http\Server](/other/links.md#http服务器)的原生配置项，如开启SSL等，都是通过该配置实现，该配置选项众多，你可以到[Swoole官网](/other/links.md#Http服务器)查看详情。
 
 
 

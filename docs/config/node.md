@@ -36,17 +36,16 @@ namespace app\controller;
 
 use dce\project\node\Node; // 引入注解式节点配置类
 use dce\project\request\Request;
-use dce\project\view\ViewCli;
+use dce\project\Controller;
 
-class TestController extends ViewCli {
-    #[Node('app', omissiblePath: true)] // 配置可可省略项目级"app"路径 (凡是以 __ 开头的方法, Dce不会当其为控制器方法, 即在该方法的注解配置的节点未指定控制器方法)
+class TestController extends Controller {
+    #[Node('app', 'cli', omissiblePath: true)] // 配置可可省略项目级"app"路径 (凡是以 __ 开头的方法, Dce不会当其为控制器方法, 即在该方法的注解配置的节点未指定控制器方法)
     public function __construct(Request $request) {
         parent::__construct($request);
     }
 
     #[Node] 
     // 配置路径, 并未配置控制器, 因为Dce能自动解析对应控制器方法. 
-    // 另外你也会发现未配置"methods", 因为当前控制器继承了 ViewCli, Dce能以此推断出你的请求方式为 cli, 但HTTP接口则需你手动指定, Dce无法得知你接口是 post/get 或其他
     public function index() {
         $this->print('哈哈');
     }
@@ -68,11 +67,11 @@ class TestController extends ViewCli {
 [`string|null $name = null`](#name)  
 [`bool|null $enableCoroutine = null`](#enablecoroutine)  
 [`bool|null $hookCoroutine = null`](#hookcoroutine)  
-[`string|null $phpTemplate = null`](#phptemplate)  
+[`string|null $render = null`](#render)  
 [`string|null $templateLayout = null`](#templateLayout)  
 [`array|null $corsOrigins = null`](#corsorigins)  
 [`array|null $projectHosts = null`](#projecthosts)  
-[`int|null $apiCache = null`](#apicache)  
+[`int|null $renderCache = null`](#renderCache)  
 [`bool|null $omissiblePath = null`](#omissiblepath)  
 [`array|null $urlArguments = null`](#urlarguments)  
 [`bool|null $urlPlaceholder = null`](#urlplaceholder)  
@@ -81,7 +80,7 @@ class TestController extends ViewCli {
 [`string|null $http301 = null`](#http301)  
 [`string|null $http302 = null`](#http302)  
 [`string|null $jsonpCallback = null`](#jsonpcallback)  
-[`array|null $extra = null`](#extra)
+[`array|null $extra = null`](#extra)  
 `bool $controllerPath = false` 是否为控制器级路径（若设为真，则作为控制器级节点，该节点将作为该控制器下所有节点的父节点）
 
 
@@ -151,30 +150,36 @@ websocket | Websocket请求
 ### `->hookCoroutine`
 `bool` 是否协程化IO操作，当$enableCoroutine=true时此参数将默认为true（会被继承，子类可自定义以覆盖父节点的定义）
 
-### `->phpTemplate`
-`string` PHP模板文件路径（相对于 `[PROJECT_NAME]/view/`目录）
+### `->render`
+`string` 渲染器或PHP模板文件路径（相对于 `[PROJECT_NAME]/template/`目录），调用控制器的[render](../request/controller.md#render)方法时会以该配置方式渲染数据（非模板值会被继承，子类可自定义以覆盖父节点的定义）
+名称 | 说明
+:--: | :--
+json | 使用JSON渲染响应内容（默认）
+jsonp | 使用JSONP渲染响应内容
+xml | 使用XML格式渲染响应内容
+[other.php] | 解析渲染PHP模板并响应（可以以此来渲染复杂结构数据，如HTML、XML等）
 
 ```php
-'php_template' => 'list.php',
-// 视图根目录的模板，路径将会解析为 [PROJECT_NAME]/view/list.php
-'php_template' => 'gallery/list.php',
-// 子目录的模板，将会解析为 [PROJECT_NAME]/view/gallery/list.php
+'render' => 'json',
+// 使用json编码数据并响应
+'render' => 'gallery/list.php',
+// 子目录的模板，将会解析为 [PROJECT_NAME]/template/gallery/list.php， 然后渲染结果并响应
 ```
 
 ### `->templateLayout`
-`string` 模板布局文件路径（相对于 `[PROJECT_NAME]/view/`目录），留空则不使用布局（会被继承，子类可自定义以覆盖父节点的定义）
+`string` 模板布局文件路径（相对于 `[PROJECT_NAME]/template/`目录），留空则不使用布局（会被继承，子类可自定义以覆盖父节点的定义）
 
-### `->apiCache`
-`int` 接口缓存（支持位或组合配置，仅对继承`\dce\project\view\ViewHttp`的控制器有效）
+### `->renderCache`
+`int = 0` 渲染缓存（支持位或组合配置，仅对HTTP请求有效）
 位元 | 类型 | 说明
 :--: | :--: | :--
 0 | 不缓存 | 不对接口/页面缓存
 1 | 缓存Api数据 | 缓存控制器方法中assign的数据，下次进入直接取缓存而不再执行控制器方法，直到缓存失效
-2 | 缓存Html模板 | 不论模板是否被修改，直接取缓存渲染直到缓存失效
-4 | 缓存Html页面 | 缓存最终的渲染内容，下次进入若Api数据无变化，则直接输出缓存，除非无缓存或已失效
+2 | 缓存模板 | 不论模板是否被修改，直接取缓存渲染直到缓存失效
+4 | 缓存渲染页面 | 缓存最终的渲染内容，下次进入若Api数据无变化，则直接输出缓存，除非无缓存或已失效
 
 ### `->omissiblePath`
-`bool` 当前节点路径是否可省略。
+`bool = false` 当前节点路径是否可省略。
 
 ```php
 'omissible_path' => false,
@@ -184,7 +189,7 @@ websocket | Websocket请求
 ```
 
 ### `->urlArguments`
-`NodeArgument[]` Url参数配置集（Url参数指伪装在Url路径部分的参数、伪静态地址中的参数，如 `/news/1.html`中，其实含有参数`id = 1`），以纯数组配置，DCE会将其转为对象数组。
+`NodeArgument[] = []` Url参数配置集（Url参数指伪装在Url路径部分的参数、伪静态地址中的参数，如 `/news/1.html`中，其实含有参数`id = 1`），以纯数组配置，DCE会将其转为对象数组。
 
 ```php
 // 下述配置可以通过 \dce\project\request\Url::make() 生成伪静态地址，用户请求该伪静态地址时，也能正确的匹配到对应的节点并解析出伪装的参数
@@ -194,7 +199,7 @@ websocket | Websocket请求
 ```
 
 ### `->urlPlaceholder`
-`bool` 参数位未传时是否保留分隔符，默认为true（此配置设为false时需要用户保证多个参数的匹配不会混淆，不会把a匹配为b参数，否则会导致错误提参）
+`bool = true` 参数位未传时是否保留分隔符，默认为true（此配置设为false时需要用户保证多个参数的匹配不会混淆，不会把a匹配为b参数，否则会导致错误提参）
 
 ```php
 'url_placeholder' => false,
@@ -204,7 +209,7 @@ websocket | Websocket请求
 ```
 
 ### `->urlSuffix`
-`array` 允许的后缀
+`array = ['', '/']` 允许的后缀
 
 ```php
 'url_suffix' => '.html',
@@ -220,10 +225,10 @@ websocket | Websocket请求
 `string` 302临时跳转目标地址，路由匹配到该节点时会自动302重定向
 
 ### `->jsonpCallback`
-`string` Jsonp请求时的回调方法url参数名
+`string = 'callback'` Jsonp请求时的回调方法url参数名
 
 ### `->lazyMatch`
-`bool` 是否惰性匹配（匹配到此及命中，不再继续匹配剩余路径）
+`bool = false` 是否惰性匹配（匹配到此及命中，不再继续匹配剩余路径）
 
 ### `->corsOrigins`
 `array` 允许跨域的主机，若配置了，则自动允许所配的主机访问（会被继承，子类可自定义以覆盖父节点的定义）

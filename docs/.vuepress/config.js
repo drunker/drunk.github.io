@@ -86,7 +86,6 @@ module.exports = {
               '/request/raw',
               '/request/router',
               '/request/controller',
-              '/request/view',
               '/request/session',
               '/request/cookie',
               '/request/url',
