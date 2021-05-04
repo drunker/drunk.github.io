@@ -66,7 +66,8 @@ module.exports = {
                   '/drunk/tree',
                   '/drunk/utility',
                 ]
-              }
+              },
+              '/base/attribute',
             ]
           },
           {
@@ -76,6 +77,7 @@ module.exports = {
               '/config/lib',
               '/config/node',
               '/config/node-tree',
+              '/config/i18n',
             ]
           },
           '/request/project',

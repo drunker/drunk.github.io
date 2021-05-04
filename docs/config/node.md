@@ -27,7 +27,7 @@ return [
 
 注解式节点是指可以在控制器方法中配置节点，这种方式可以让你编写接口更加便捷直观，可以省略控制器相关配置项。但注解式节点需要通过扫描全部控制器文件（[默认最深4层](/config/#node)）来解析，如果你是Cgi式应用，每次请求都会扫描解析全部控制器方法，比较浪费IO，你可以在生产环境开启[节点缓存配置](/config/#node)来提升性能。如果你是常驻内存服务的应用，则无需担心IO浪费，因为Dce仅在载入时（服务启动前）会扫描节点。
 
-Dce未在项目下找到`config/nodes.php`文件时，则视其为注解式节点项目，会扫描控制器方法的注解来解析节点配置。下面时一个注解节点配置示例：
+Dce未在项目下找到`config/nodes.php`文件时，则视其为注解式节点项目，会扫描控制器方法的注解来解析节点配置。下面是一个注解节点配置示例：
 
 ```php
 <?php
@@ -35,17 +35,13 @@ namespace app\controller;
 // 从名字空间可以看出当前控制器所属一个叫 app 的项目
 
 use dce\project\node\Node; // 引入注解式节点配置类
-use dce\project\request\Request;
 use dce\project\Controller;
 
 class TestController extends Controller {
-    #[Node('app', 'cli', omissiblePath: true)] // 配置可可省略项目级"app"路径 (凡是以 __ 开头的方法, Dce不会当其为控制器方法, 即在该方法的注解配置的节点未指定控制器方法)
-    public function __construct(Request $request) {
-        parent::__construct($request);
-    }
+    #[Node('app', 'cli', omissiblePath: true)] // 配置可省略项目级"app"路径 (凡是以 __ 开头的方法, Dce不会当其为控制器方法, 即在该方法的注解配置的节点未指定控制器方法)
+    public function __init() {}
 
-    #[Node] 
-    // 配置路径, 并未配置控制器, 因为Dce能自动解析对应控制器方法. 
+    #[Node] // 配置注解式节点, 并未配置路径及控制器, 未配置路径时以方法名作为路径, 且Dce能自动解析对应控制器方法. 
     public function index() {
         $this->print('哈哈');
     }
@@ -115,7 +111,7 @@ websocket | Websocket请求
 
 ```php
 'methods' => 'get',
-// 配置中支持字符串的形式，转为对象时会自动转为数组属性
+// 配置支持字符串的形式，转为对象时会自动转为数组属性
 'methods' => ['get', 'cli'],
 // 也支持直接定义为数组形式
 ```
@@ -151,7 +147,7 @@ websocket | Websocket请求
 `bool` 是否协程化IO操作，当$enableCoroutine=true时此参数将默认为true（会被继承，子类可自定义以覆盖父节点的定义）
 
 ### `->render`
-`string` 渲染器或PHP模板文件路径（相对于 `[PROJECT_NAME]/template/`目录），调用控制器的[render](../request/controller.md#render)方法时会以该配置方式渲染数据（非模板值会被继承，子类可自定义以覆盖父节点的定义）
+`string` 渲染器或PHP模板文件路径（相对于 `[PROJECT_NAME]/template/`目录），调用控制器的[render()](../request/controller.md#render)方法时会以该配置方式渲染数据（非模板值会被继承，子类可自定义以覆盖父节点的定义）
 名称 | 说明
 :--: | :--
 json | 使用JSON渲染响应内容（默认）
@@ -163,7 +159,7 @@ xml | 使用XML格式渲染响应内容
 'render' => 'json',
 // 使用json编码数据并响应
 'render' => 'gallery/list.php',
-// 子目录的模板，将会解析为 [PROJECT_NAME]/template/gallery/list.php， 然后渲染结果并响应
+// 子目录的模板，将会解析为 [PROJECT_NAME]/template/gallery/list.php，然后渲染结果并响应
 ```
 
 ### `->templateLayout`

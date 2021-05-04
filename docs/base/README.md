@@ -172,9 +172,13 @@ dce\Dce::boot();
 
 
 
-## \dce\Loader
+## \dce\loader\Loader
 
 加载器类，注册类的自动加载。
+
+
+### `::EVENT_ON_CLASS_LOAD`
+`string = 'EVENT_ON_CLASS_LOADED'` 类加载完成事件名
 
 
 ### `::prepare()`

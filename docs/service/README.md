@@ -30,7 +30,7 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
 
 
 #### `->sessionManager`
-`\dce\project\request\SessionManager` Session管理器
+`\dce\project\session\SessionManager` Session管理器
 
 
 #### `->apiHost`
@@ -48,7 +48,7 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
 #### `->genSessionManager()`
 生成SessionManager实例（可在子类覆盖此方法使用自定义SessionManager类）
 
-- 返回`\dce\project\request\SessionManager`
+- 返回`\dce\project\session\SessionManager`
 
 
 #### `->eventBeforeStart()`
@@ -78,7 +78,6 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
   - `\Swoole\Server $server` Swoole服务器对象
   - `int $fd` 连接文件描述符
   - `int $reactorId` 连接所在的 Reactor 线程 ID
-  - `\dce\project\request\SessionForm|null $sessionForm` Session表单对象
 
 - 返回`void`
 

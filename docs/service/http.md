@@ -165,7 +165,7 @@ Swoole版HTTP原始请求类，本类继承于[HTTP原始请求类](/request/raw
 
 ### `\http\service\CookieSwoole`
 
-Swoole版Cookie类，继承并实现了[Cookie类](/request/cookie.md)
+Swoole版Cookie类，继承并实现了[Cookie类](/session/cookie.md)
 
 
 

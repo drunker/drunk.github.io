@@ -1,6 +1,6 @@
 # Cookie
 
-## \dce\project\request\Cookie;
+## \dce\project\session\Cookie;
 
 Cookie基类
 
@@ -47,6 +47,6 @@ Cookie基类
 - 返回`void`
 
 
-## \dce\project\request\CookieCgi
+## \dce\project\session\CookieCgi
 
 Cgi版Cookie的实现类

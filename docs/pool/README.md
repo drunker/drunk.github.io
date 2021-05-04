@@ -84,7 +84,7 @@ RedisPool::inst()->put($redis);
 
 
 ### `->get()`
-取实例 (建议在子类中定义fetch方法限定返回类型返回此方法的调用)
+取实例 (需在子类实现[->fetch()](#fetch)方法返回此方法的调用，可限定返回类型)
 
 - 参数
   - `array $config = []` 需要取的实例的原始生产配置（用于从实例组中的特定池取实例，默认是负载均衡的取）
@@ -97,48 +97,37 @@ RedisPool::inst()->put($redis);
 $redis = RedisPool::inst()->setConfigs([
   ['host' => '127.0.0.1', 'port' => 6379],
   ['host' => '192.168.111.111', 'port' => 6379],
-], false)->get(['host' => '192.168.111.111', 'port' => 6379]);
+], false)->fetch(['host' => '192.168.111.111', 'port' => 6379]);
 $redis->set('homepage', 'https://drunkce.com');
 // 将实例放回实例池
 RedisPool::inst()->put($redis);
 ```
 
+::: warning 注意
+从池中取完实例执行完业务后，必须调用`->put()`方法归还，否则可能会在并发下造成协程死锁。
+:::
 
-### `->getProductMap()`
+
+### `->getProduct()`
 根据实例取其映射的配置通道等
 
 - 参数
-  - `object $object` 从池中取到的实例
+  - `object $object` 从池中取实例信息
 
-- 返回`array`
+- 返回`\dce\pool\PoolProduct`
 
 - 示例
 ```php
 $pool = RedisPool::inst()->setConfigs(['host' => '127.0.0.1', 'port' => 6379]);
 $redis = $pool->fetch();
-var_dump($pool->getProductMap($redis)['config']->port);
+var_dump($pool->getProduct($redis)->config->port);
 // 6379
 $pool->put($redis);
 ```
 
 
-### `->pop()`
-弹出释放一个实例
-
-- 返回`void`
-
-
 ### `->setConfigsInterface()`
 子类可以覆盖此方法, 用于从配置中心动态取配置
-
-- 返回`void`
-
-
-### `->destroyProduct()`
-子类可以覆盖此方法断开连接 (若不能随对象注销自动断开)
-
-- 参数
-  - `object $object` 需要断开连接的实例
 
 - 返回`void`
 
@@ -184,7 +173,7 @@ class RedisPool extends Pool {
 
 
 ### `->fetch();`
-从池中取空闲实例（建议子类实现限定返回类型，用于IDE上下文分析）
+同[->get()](#get)，是对其的包装（子类实现限定返回类型，用于IDE上下文分析）
 
 - 返回`object`
 

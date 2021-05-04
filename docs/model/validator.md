@@ -240,6 +240,14 @@ class ChildModel extends Model {
     #[ Property, Validator(Validator::RULE_INTEGER, max: [10, '{{label}} 的值 {{value}} 不能大于10'], min: 1, error: '{{label}} 的值 {{value}} 非法'), ]
     public int $id3;
 
+    // 多语种模板支持, 并指定异常码 1100 (省略则为0)
+    #[ Property, Validator(Validator::RULE_INTEGER, max: [10, ['{{label}} 的值 {{value}} 不能大于10', 'Value of {{label}} cannot large then 10'], 1100], min: 1, ]
+    public int $id4;
+
+    // 通用异常多语种支持, 注意, 属性值置为0时多语种异常才会生效
+    #[ Property, Validator(Validator::RULE_INTEGER, max: 10, min: 1, error: [0, ['{{label}} 的值 {{value}} 非法', 'Value of {{label}} invalid'], 1101])]
+    public int $id5;
+
     public function save() {
         $this->valid();
     }

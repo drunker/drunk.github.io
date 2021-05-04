@@ -79,7 +79,7 @@ Event::trigger('my_event', [3, 4]);
 
 - 参数
   - `string $eventName` 事件名
-  - `array $args = []` 事件触发上下文参数（最终触发回调参数为 `附带参数 + 事件触发上下文参数`）
+  - `mixed ... $args` 事件触发上下文参数（最终触发回调参数为 `附带参数 + 事件触发上下文参数`）
 
 - 返回`bool`
 
@@ -150,6 +150,6 @@ Event::trigger('my_event', [3, 4]);
 触发回调函数队列
 
 - 参数
-  - `array $args = []` 事件触发上下文参数
+  - `mixed ... $args` 事件触发上下文参数
 
 - 返回`bool`

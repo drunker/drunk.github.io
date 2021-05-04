@@ -41,3 +41,11 @@
 
 ### Docker镜像
 <https://hub.docker.com/r/phpswoole/swoole>
+
+## 标准
+
+### ISO_639语种代码
+<https://zh.wikipedia.org/wiki/ISO_639-1>
+
+### ISO_3166国家代码
+<https://zh.wikipedia.org/wiki/ISO_3166-1>

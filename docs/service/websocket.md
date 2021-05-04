@@ -161,20 +161,3 @@ Websocket服务器类，继承于[服务器基类](/service/README.md#服务器�
 Websocket原始请求类，本类继承于[长连接原始请求类](/service/#dce-service-server-rawrequestconnection)，实现了该类及各父辈类的抽象方法，完成了相关Websocket请求参数的填充。
 
 你可以自定义Websocket服务器类，并定义`\websocket\service\WebsocketServer::$rawRequestWebsocketClass`属性值为继承拓展此类或自定义原始请求类的类名类，以此方式实现自定义Websocket原始请求类。
-
-
-
-### `\rpc\websocket\service\WebsocketServerApi`
-
-Websocket服务器接口类
-
-
-#### `::push()`
-向客户端推送消息
-
-- 参数
-  - `int $fd`
-  - `mixed $value`
-  - `string $path`
-
-- 返回`bool`

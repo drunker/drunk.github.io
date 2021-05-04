@@ -5,7 +5,7 @@ DCE配置分为公共配置与项目配置，公共配置位于`APP_COMMON . 'co
 <?php
 // [SomeProject]/config/config.php
 return [
-    'app_id' => 'app1',
+    'app' => ['id' => 'app1'],
     'bootstarp' => function () {
         \dce\pool\PoolAbstract::setChannelClass(\dce\pool\CoroutineChannel::class);
     }
@@ -20,14 +20,25 @@ return [
 DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有效，无法在项目中覆盖配置）
 
 
-### `->appId`
-`string` **`c`** 应用ID。用于多个应用部署于同一台机器时区分他们，若未定义则会自动生成。
+### `->app`
+`string` **`c`** 应用配置。
+```php
+'app' => [
+    'id' => 'string', // 应用ID, 用于多个应用部署于同一台机器时区分他们, 若未定义则会自动生成
+    'name' => 'string|Stringable', // 应用名
+    'lang' => 'string', // 默认语言码
+    'country' => 'string', // 默认国家码
+    'lang_parse' => 'callable(Request):string', // 语言码解析器, 返回语言码
+    'country_parse' => 'callable(Request):string', // 国家码解析器, 返回国家码
+    'lang_mapping' => 'callable(int|string):[int|string=>string]', // 语种映射工厂, 根据语种文本实例ID返回语言码与语种文本的映射表, 以此扩展更多语种
+],
+```
 
 ### `->bootstarp`
 `Closure|null` **`c`** 引导回调。可以在此做全局初始化工作, 如设置池通道, 设置数据库代理等。
 
 ### `->prepare`
-`Closure|null` 项目预备回调。可以做项目初始化相关工作，（在cli型应用中，只会在第一次访问项目前执行该方法）。
+`Closure|null` 项目预备回调。可以做项目初始化相关工作（在服务器应用中，只会在第一次请求项目接口前执行该方法）
 
 ### `->projectPaths`
 `array|null` **`c`** 扩展项目路径。若某些项目不在默认项目根目录下，可以通过此配置单独指定。若以斜杠结尾, 视为根目录, 将扫描其下全部目录作为自定义项目；无斜杠, 则作为一个单独的自定义项目，如：

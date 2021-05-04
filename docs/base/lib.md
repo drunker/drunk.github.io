@@ -31,7 +31,52 @@
 
 ## \dce\base\Exception
 
-Dce异常基类，异常处理器（其他异常皆继承于此类，尚未完善）。
+Dce异常基类，异常处理器。本类实现了`\dce\loader\ClassDecorator`接口，所以支持静态属性自动实例化及Language注解。
+
+
+### `__construct()`
+构造方法
+
+- 参数
+  - `int|string|Stringable $message = ''` 异常消息，若传入int且无code，则code为message且message为空
+  - `int $code = 0` 异常代码，若非0且无消息，则尝试以code为Language ID查Language，以查到的Language对象为message
+  - `Throwable $previous = null`
+
+- 示例
+```php
+testPoint((new \dce\base\Exception(lang(['中文异常', 'Eng exception'])))->getMessage());
+// 1-1    string(12) "中文异常"
+```
+
+
+### `::format()`
+使用sprintf格式化异常消息
+
+- 参数
+  - `string|Stringable ...$parameters`
+
+- 返回`static`
+
+- 示例
+```php
+testPoint((new \dce\base\Exception(lang(['你好 %s !'])))->format('世界')->getMessage());
+// 1-1    string(15) "你好 世界 !"
+```
+
+
+### `::lang()`
+指定异常消息语种
+
+- 参数
+  - `string $lang`
+
+- 返回`static`
+
+- 示例
+```php
+testPoint((new \dce\base\Exception(lang(['你好 %s !', 'Hello %s !'])))->format(lang(['世界', 'world']))->lang('en')->getMessage());
+// 1-1    string(13) "Hello world !"
+```
 
 
 
