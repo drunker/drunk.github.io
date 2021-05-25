@@ -29,9 +29,32 @@
 
 
 
+## \dce\base\Openly
+
+公共标记接口，实现此接口的异常可以被自动响应到客户端
+
+
+
 ## \dce\base\Exception
 
 Dce异常基类，异常处理器。本类实现了`\dce\loader\ClassDecorator`接口，所以支持静态属性自动实例化及Language注解。
+
+
+### `->openly`
+`string[] = []` 公开异常码集（可抛出到用户端，若开启了[自动捕获异常](../config/node.md#autocatch)）
+
+形式 | 说明 | 示例
+:-: | :- | :-
+单异常码 | 公开单个异常 | [10000, 10001]
+横杠分隔的异常码 | 公开该区间（同类中的） | ['10000-10010']
+头/尾横杠异常码 | 公开头/尾区间（同类中的） | ['10000-']
+单横杠 | 全公开，等价于实现Openly接口 | ['-']
+
+### `->closed`
+`string[] = []` 非公开异常码集（会以HTTP500抛出到用户端）
+
+### `->http`
+`string[] = []` HTTP异常码集（将作为HTTP状态码响应，如401）
 
 
 ### `__construct()`
@@ -49,7 +72,7 @@ testPoint((new \dce\base\Exception(lang(['中文异常', 'Eng exception'])))->ge
 ```
 
 
-### `::format()`
+### `->format()`
 使用sprintf格式化异常消息
 
 - 参数
@@ -64,7 +87,7 @@ testPoint((new \dce\base\Exception(lang(['你好 %s !'])))->format('世界')->ge
 ```
 
 
-### `::lang()`
+### `->lang()`
 指定异常消息语种
 
 - 参数

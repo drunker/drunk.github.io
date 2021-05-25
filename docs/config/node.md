@@ -77,6 +77,7 @@ class TestController extends Controller {
 [`string|null $http302 = null`](#http302)  
 [`string|null $jsonpCallback = null`](#jsonpcallback)  
 [`array|null $extra = null`](#extra)  
+[`bool|null $autoCatch = null`](#autocatch)  
 `bool $controllerPath = false` 是否为控制器级路径（若设为真，则作为控制器级节点，该节点将作为该控制器下所有节点的父节点）
 
 
@@ -225,6 +226,9 @@ xml | 使用XML格式渲染响应内容
 
 ### `->lazyMatch`
 `bool = false` 是否惰性匹配（匹配到此及命中，不再继续匹配剩余路径）
+
+### `->autoCatch`
+`bool = true` 是否自动捕获异常（若打开，则会自动catch异常，若为[HTTP异常](../base/lib.md#http)，则响应HTTP状态码，否则若为[公开异常](../base/lib.md#openly)，则调用[Controller->exception](../request/controller.md#exception)响应，否则尝试响应HTTP500）
 
 ### `->corsOrigins`
 `array` 允许跨域的主机，若配置了，则自动允许所配的主机访问（会被继承，子类可自定义以覆盖父节点的定义）
