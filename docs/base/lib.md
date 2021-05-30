@@ -41,7 +41,7 @@ Dce异常基类，异常处理器。本类实现了`\dce\loader\ClassDecorator`�
 
 
 ### `->openly`
-`string[] = []` 公开异常码集（可抛出到用户端，若开启了[自动捕获异常](../config/node.md#autocatch)）
+`string[] = []` 公开异常码集（可自动抛出到用户端）
 
 形式 | 说明 | 示例
 :-: | :- | :-

@@ -58,6 +58,15 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 ],
 ```
 
+### `->template`
+`array` 模板配置
+```php
+'template' => [
+    'status' => DCE_ROOT . 'engine/project/render/template/status.php', // 结果页模板（成功失败反馈页）
+    'exception' => DCE_ROOT . 'engine/project/render/template/exception.php', // 异常页模板（如HTTP500）
+],
+```
+
 ### `->rewriteMode`
 `bool` 是否重写模式。用于使用url生成函数生成伪静态Url（如`Url::make('home/news', ['id'=>1])`可通过node配置生成，真：`/news/1.html`；假：`/?/news/1.html`），默认为假。
 
@@ -134,9 +143,6 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
     'manager_index' => 0, // SessionManagerRedis库号
 ],
 ```
-
-### `->blockPaths`
-`string[]` 需内置Http服务忽略的请求路径。默认为`['/favicon.ico',]`。
 
 ### `->redis`
 `array` **`c`** Redis配置。格式如下：
@@ -343,8 +349,15 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 ### `->log`
 `array` 日志记录器配置
 ```php
-'db' => [ // 数据库日志
-    'console' => false, // 是否在控制台输出日志
+'log' => [
+    'db' => [ // 数据库日志
+        'console' => false, // 是否在控制台输出日志
+    ],
+    'exception' => [ // 异常日志
+        'console' => true, // 是否在控制台输出日志
+        'log_file' => APP_RUNTIME . 'log/exception/%s.log', // 日志文件路径（若设置为空则不记录到文件）
+        'log_name_format' => 'Y-m', // 日志文件按日期命名格式化模板
+    ],
 ],
 ```
 

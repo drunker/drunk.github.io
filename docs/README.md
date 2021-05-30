@@ -61,7 +61,7 @@ dce websocket start
 
 JS连接Websocket服务
 ```js
-const ws = new WebSocket('ws://127.0.0.1:20461');
+let ws = new WebSocket('ws://127.0.0.1:20461');
 ws.onopen = () => ws.send('');
 ws.onmessage = msg => console.log(msg.data);
 // 若连接成功，将在控制台打印出下述消息
