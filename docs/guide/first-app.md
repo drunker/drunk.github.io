@@ -188,7 +188,7 @@ dce http start
 
 ## Websocket服务器
 
-Websocket也是以[内置项目](/service/websocket.md)的形式封装的，Dce完全接管了websocket的message事件，将之作为请求响应式处理，当然你也可以只处理请求而不响应，或者异步响应。Dce会对数据以`explode("\n", $data)`的形式拆包，第一部分将作为请求路径，会根据该路径定位Node节点，第二部分作为请求数据，如果该数据为json，则会自动解析为PHP数组存在`$request->request`上，你也可以通过`$request->rawData`取原始数据。当然这些拆包方法及定位Node等所有行为，你都可以自定义实现，完整介绍请参见 [内置Websocket服务](/service/websocket.md)
+Websocket也是以[内置项目](/service/websocket.md)的形式封装的，Dce完全接管了websocket的message事件，将之作为请求响应式处理，当然你也可以只处理请求而不响应，或者异步响应。Dce会对数据以`explode(";", $data)`的形式拆包，第一部分将作为请求路径，会根据该路径定位Node节点，第二部分作为请求数据，如果该数据为json，则会自动解析为PHP数组存在`$request->request`上，你也可以通过`$request->rawData`取原始数据。当然这些拆包方法及定位Node等所有行为，你都可以自定义实现，完整介绍请参见 [内置Websocket服务](/service/websocket.md)
 
 1. 配置节点，在nodes.php追加下述内容
 
@@ -226,7 +226,7 @@ dce websocket start
 ``` javascript
 const ws = new WebSocket("ws://127.0.0.1:20461/");
 ws.onopen = () => {
-    ws.send("hello/websocket\nData from client");
+    ws.send("hello/websocket;Data from client");
 };
 ws.onmessage = (evt) => {
     console.log("Received data from server: " + evt.data);
@@ -237,8 +237,7 @@ ws.onmessage = (evt) => {
 5. 若看到打印的下述数据，则表示发送接收成功。（经历了连接-客户端发送-服务端接收-服务端解包-服务端定位并执行控制器-服务端打包-服务端发送-客户端接收这些过程）
 
 ```
-Received data from server: hello/websocket
-{"data":{"message":"Server received: Data from client"}}
+Received data from server: hello/websocket;{"data":{"message":"Server received: Data from client"}}
 ```
 
 你可能会说你需要发送到指定的客户端而不仅仅是响应某个消息，Dce当然支持，你可以到 [内置Websocket服务器](/service/websocket.md) 篇查看完整介绍以了解。
@@ -283,23 +282,19 @@ dce tcp start
 ``` bash
 # 测试Tcp连接
 ./nc 127.0.0.1 20462
-hello/tcp
-Tcp data from client
+hello/tcp;Tcp data from client
 
 # 测试Udp连接 (若为docker环境, 需要在映射端口指明为udp端口, 如-p 20463:20463/udp)
 ./nc -u 127.0.0.1 20463
-hello/tcp
-Udp data from client
+hello/tcp;Udp data from client
 ```
 
 5. 若看到打印的下述数据，则表示发送接收成功。（经历了连接-客户端发送-服务端接收-服务端解包-服务端定位并执行控制器-服务端打包-服务端发送-客户端接收这些过程）
 
 ```
 # Tcp通信成功响应
-hello/tcp
-{"data":{"message":"Server received: Tcp data from client\n"}}
+hello/tcp;{"data":{"message":"Server received: Tcp data from client\n"}}
 
 # Udp通信成功响应
-hello/tcp
-{"data":{"message":"Server received: Udp data from client\n"}}
+hello/tcp;{"data":{"message":"Server received: Udp data from client\n"}}
 ```

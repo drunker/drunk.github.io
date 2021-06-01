@@ -29,13 +29,17 @@
 ### `->render()`
 渲染响应，先通过节点配置的[render](../config/node.md#render)属性值渲染数据，然后将数据传递给[response()](#response)方法响应输出。
 
-HTTP请求会自动调用此方法渲染，无需手动调用。你也可以在控制器中手动调用渲染，手动调用后将不再自动调用，因为HTTP请求只能渲染响应一次。非HTTP请求不会自动渲染也没有调用次数限制。
+请求响应式请求会自动调用此方法渲染，无需手动调用。你也可以在控制器中手动调用渲染，手动调用后将不再自动调用，因为请求响应式请求只能渲染响应一次。非请求响应式请求不会自动渲染也没有调用次数限制。
 
 - 参数
   - `mixed $data = false` 需渲染的内容，若未指定将渲染通过[assign](#assign)系方法预设的数据
   - `string|false|null $path = null` 响应路径，若未指定则响应为请求路径（用于长连接请求向客户端响应推送数据）
 
 - 返回`void`
+
+::: tip 请求响应式请求
+请求响应式请求表示发起请求后需自动响应的请求，HTTP与[任意请求响应式长连接请求](../service/README.md#requestid)皆为该模式的请求。
+:::
 
 
 ### `->response()`
@@ -307,7 +311,7 @@ DCE也支持模板布局，布局文件路径定义于节点配置的[templateLa
 
 
 ### 渲染缓存
-HTTP请求支持渲染缓存，通过节点参数[renderCache](../config/node.md#rendercache)配置。
+请求响应式请求支持渲染缓存，通过节点参数[renderCache](../config/node.md#rendercache)配置。
 
 #### 缓存逻辑
 ---
