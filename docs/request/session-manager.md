@@ -77,7 +77,7 @@ fdid | 长连接 | 连接ID，一个连接只会有一个ID
 - 返回`void`
 
 
-### `->signIn()`
+### `->login()`
 处理HTTP登录，标记相关信息，需要在你的HTTP登录业务中手动调用
 
 - 参数
@@ -88,13 +88,13 @@ fdid | 长连接 | 连接ID，一个连接只会有一个ID
 
 - 示例
 ```php
-$signer = Member::signIn($username, $password);
+$signer = Member::login($username, $password);
 // 标记用户与会话映射
-SessionManager::inst()->signIn($signer['mid'], $request->session->getId());
+SessionManager::inst()->login($signer['mid'], $request->session->getId());
 ```
 
 
-### `->fdSignIn()`
+### `->fdLogin()`
 处理长连接登录，标记mid相关信息，需要你在长连接的登录业务中手动调用
 
 - 参数
@@ -107,13 +107,13 @@ SessionManager::inst()->signIn($signer['mid'], $request->session->getId());
 
 - 示例
 ```php
-$signer = Member::signIn($username, $password);
+$signer = Member::login($username, $password);
 // 标记用户与会话及连接映射
-SessionManager::inst()->fdSignIn($signer['mid'], $request->fd, $request->rawRequest->getServer()->apiHost, $request->rawRequest->getServer()->apiPort);
+SessionManager::inst()->fdLogin($signer['mid'], $request->fd, $request->rawRequest->getServer()->apiHost, $request->rawRequest->getServer()->apiPort);
 ```
 
 
-### `->signOut()`
+### `->logout()`
 退出登录
 
 - 参数
@@ -123,7 +123,7 @@ SessionManager::inst()->fdSignIn($signer['mid'], $request->fd, $request->rawRequ
 
 - 示例
 ```php
-SessionManager::inst()->signOut($request->session->getId());
+SessionManager::inst()->logout($request->session->getId());
 ```
 
 
@@ -162,6 +162,16 @@ SessionManager::inst()->setSession($mid, 'signer', $newInfo);
   - `int $mid` 用户ID
 
 - 返回`void`
+
+
+### `->renewSession()`
+更新Session（将原fd与mid绑定的sid更新为新的）
+
+- 参数
+  - `Session $session` 需renew的Session实例
+  - `bool $longLive = false` 是否长存Session
+
+- 返回`Session`
 
 
 ### `->sendMessage()`

@@ -263,10 +263,13 @@ return [
             'table' => [
                 'member' => [
                     'id_column' => 'mid', // 未配置sharding_column时将以id_column作为分库字段
+                    'id_tag' => 'mid',
                 ],
                 'member_login' => [
                     'id_column' => 'id', // 若配置了id_column字段, 则将使用生成器生成ID, 若同时配置了sharding_column, 则该字段将作为ID的基因字段
+                    'id_tag' => 'mlid',
                     'sharding_column' => 'mid', // 若未配置id_column字段, 则将不主动生成ID, 分库将仅以sharding_column字段划分
+                    'sharding_tag' => 'mid'
                 ],
             ],
             'mapping' => [ // 分库规则映射表

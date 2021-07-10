@@ -136,11 +136,13 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
     'name' => 'dcesid', // Session ID名
     'auto_open' => 0, // 是否自动启动（默认不自启）
     'ttl' => 3600, // Session存活时间
+    'long_ttl' => 0, // 较长的Session存活时间
     'class' => '', // 未指定Session类则Dce自行选择
     'root' => APP_RUNTIME . 'session/', // 文件型Session处理器根目录
     'index' => 0, // RedisSession处理器库号
     'manager_class' => '', // 留空表示Dce执行选择SessionManager类
     'manager_index' => 0, // SessionManagerRedis库号
+    'valid' => [Utility::class, 'noop'], // session有效性校验方法，若返回false，则表示该session异常（如非法异地登录），Dce将自动清除这个session
 ],
 ```
 
@@ -212,10 +214,13 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
         'table' => [ // 适用于该分库规则的表名
             'member' => [
                 'id_column' => 'mid', // 未配置sharding_column时将以id_column作为分库字段, 如果ID生成器tag名与字段名不一致, 则可以以数组的形式配置字段与tag, 如 ['name' => 'mid', 'tag' => 'mid'], sharding_column 亦如此
+                'id_tag' => 'mid',
             ],
             'member_login' => [
                 'id_column' => 'id', // 若配置了ID字段, 则将使用生成器生成ID, 若同时配置了sharding_column, 则该字段将作为ID的基因字段
+                'id_tag' => 'ml_id',
                 'sharding_column' => 'mid', // 若未配置ID字段, 则将不主动生成ID, 分库将仅以sharding_column字段划分
+                'sharding_tag' => 'mid',
             ],
         ],
         'mapping' => [ // 分库与ID取模余数映射表, 标记取模值与路由库的映射关系
@@ -231,6 +236,7 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
         'table' => [
             'member_login' => [
                 'id_column' => 'id',
+                'id_tag' => 'mlid',
             ],
         ],
         'mapping' => [ // 分库与ID区间起始值映射表, 标记ID处于哪个区间及对应哪个库
@@ -350,6 +356,12 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 `array` 日志记录器配置
 ```php
 'log' => [
+    'access' => [ // 访问日志
+        'request' => 'bool', // console，请求日志
+        'response' => 'bool', // console，响应日志
+        'connect' => 'bool', // console，连接日志，包括disconnect等
+        'send' => 'bool', // console，消息推送日志，包括sentTo与push
+    ],
     'db' => [ // 数据库日志
         'console' => false, // 是否在控制台输出日志
     ],

@@ -6,53 +6,6 @@
 数据结构工具，加工处理复合结构型数据
 
 
-### `::tree()`
-将列表形数据树形化（此方法后续可能集成到`\drunk\Tree`下）
-
-- 参数
-  - `array $items` 列表形数据
-  - `mixed $pid` 根父ID
-  - `int $deep = 0` 树形深度，0表示不限深度
-  - `string $primaryKey = 'id'`  主键名
-  - `string $parentKey = 'pid'` 父键名
-  - `bool $isKeepKey = false` 是否保持原始下标
-
-- 返回`array`
-
-- 示例
-```php
-\drunk\Structure::tree([
-    ['id'=>1, 'pid'=>0],
-    ['id'=>2, 'pid'=>1],
-    ['id'=>3, 'pid'=>1],
-    ['id'=>4, 'pid'=>2],
-    ['id'=>5, 'pid'=>4],
-], 1);
-/*
-[
-    'id'=>1,
-    'pid'=>0,
-    'children'=>[
-        [
-            'id'=>2,
-            'pid'=>1,
-            'children'=>[
-                [
-                    'id'=>4,
-                    'pid'=>2,
-                    'children'=>[
-                        ['id'=>5, 'pid'=>4]
-                    ]
-                ]
-            ]
-        ],
-        ['id'=>3, 'pid'=>1]
-    ]
-]
-*/
-```
-
-
 ### `::arrayMerge()`
 递归合并数组
 
@@ -202,3 +155,14 @@ $target = ['a'=>['b'=>1]];
 \drunk\Structure::arrayIndexGet([2=>1, 3=>1]);
 // false
 ```
+
+
+### `::sortByColumnRef()`
+按照矩阵列值集为参考，将矩阵按该参考值列表排序（常用语in查询时，查询结果与in元素顺序不一致，此时可以用此方法方便的排序）
+
+- 参数
+  - `array[]|ArrayAccess[] $matrix` 待排序的矩阵
+  - `string $column` 排序参考列
+  - `array $refValues` 排序参考值集
+
+- 返回`array`

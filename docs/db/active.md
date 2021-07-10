@@ -2,9 +2,6 @@
 
 活动记录定义了一个抽象类，该抽象类继承于[模型类](/model)，类中定义了一些与数据库表交互的接口方法。你可以定义一个与数据表对应的类继承活动记录类，从而通过读写类实例来操作数据表记录。
 
-~~Dce的活动记录是利用PHP类的魔术属性特性实现，~~ 尴尬，当作者写到这里的时候，发现利用魔术属性实现活动记录不够优雅，PHP8推出了新的注解特性，完全可以利用这个特性实现非常优雅的活动记录。于是说干就干，实现新版活动记录。在你看到这个文档时，Dce的活动记录（[及模型](/model)）已是利用注解实现，你将看不到利用魔术属性实现的Dce活动记录。
-
-
 
 ## \dce\db\active\ActiveRecord;
 
@@ -88,6 +85,10 @@ class MemberBadge extends DbActiveRecord {
     public string $createTime;
 }
 ```
+
+::: danger 警告
+请不要对字段型类属性设置默认值，这将可能导致利用活动记录更新数据库时，真实业务数据被更新为此默认值。如果需要插入时自动补充默认值，请使用[默认值赋值器](../model/validator.md#dce-model-validator-assignment-defaultvalidator)实现。
+:::
 
 
 ### `->getPkValues()`

@@ -222,6 +222,17 @@ test($model->partner);
 - 返回`bool`
 
 
+### `::from()`
+以属性键值对实例化一个模型对象
+
+- 参数
+  - `array $properties` 属性键值对
+  - `bool $unsetDefault = true` 是否unset掉类属性默认值
+  - `mixed ... $ctorArgs` 需传递到构造函数的参数集
+
+- 返回`static`
+
+
 
 ## \dce\model\Property
 

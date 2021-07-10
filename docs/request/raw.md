@@ -109,6 +109,15 @@ Http版原始请求抽象类
 `int` 服务端口
 
 
+### `->getHeader();`
+取请求头
+
+- 参数
+  - `string|null $key` {string: 某个头, null: 全部头信息}
+
+- 返回`string|array|null`
+
+
 ### `->header();`
 设置响应头
 

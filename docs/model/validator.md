@@ -506,6 +506,21 @@ SetValidator::inst([
 ```
 
 
+### `\dce\model\validator\checker\BitsetValidator`
+位集校验器
+
+#### `->set`
+`array` 允许的位集
+
+- 示例
+```php
+BitsetValidator::inst([
+    'set' => [1, 2, 4],
+])->checkGetValue(10);
+// '值10必须为[1,2,4]中的一个或组合'异常
+```
+
+
 ### `\dce\model\validator\checker\StringValidator`
 
 #### `->min`

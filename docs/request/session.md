@@ -108,6 +108,21 @@ Session基类，抽象类，封装了Session基础属性方法
 - 返回`void`
 
 
+### `->renew();`
+重建一个session实体并删除旧实体，更新当前对象
+
+- 参数
+  - `bool $longLive = false` 是否长存session
+
+- 返回`static`
+
+
+### `->getMeta();`
+取源信息
+
+- 返回`['create_time' => 'int', 'long_live' => 'bool', 'ttl' => 'int', 'expiry' => 'int']`
+
+
 
 ## \dce\project\session\SessionFile
 

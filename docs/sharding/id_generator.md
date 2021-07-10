@@ -249,7 +249,8 @@ Co\run(function () {
 
 - 参数
   - `string $tag` ID标签名
-  - `int|string $uid = 0` 基因用户ID
+  - `int|string $uid = 0` 基因ID
+  - `string|null $geneTag = null` 基因标签，传了则通过IDG拆包取基因ID，否则以crc32编码取基因ID
 
 - 返回`int`
 
@@ -267,7 +268,8 @@ test($mid);
 - 参数
   - `string $tag` ID标签名
   - `int $count` 批量生成量
-  - `int|string $uid = 0` 基因用户ID
+  - `int|string $uid = 0` 基因ID
+  - `string|null $geneTag = null` 基因标签，传了则通过IDG拆包取基因ID，否则以crc32编码取基因ID
 
 - 返回`int[]`
 
@@ -290,6 +292,17 @@ test($mids);
        }
 */
 ```
+
+
+### `->mod()`
+取模以匹配分库
+
+- 参数
+  - `int $modulus` 模数（除数）
+  - `int|string $id` 待解基因ID（被除数）
+  - `string|null $tag = null` 基因标签，传了则通过IDG拆包取基因ID，否则以crc32编码取基因ID
+
+- 返回`int`
 
 
 ### `->getClient()`
@@ -406,7 +419,6 @@ test($batch, $batch->arrayify());
 - 参数
   - `string $tag`
   - `int $id`
-  - `int $modulus = 0` 模数，若传入了则执行取模运算计算余数
 
 - 返回`int`
 
@@ -414,13 +426,31 @@ test($batch, $batch->arrayify());
 ```php
 $idg = Dce::$config->idGenerator->getClient('mid');
 $geneID = $idg->extractGene('mid', 432782108193504512);
-$geneID2 = $idg->extractGene('mid', 432782108193504512, 4);
-test($geneID, $geneID2);
+test($geneID);
 /*
 1-1    int(1690555110130877)
-1-2    int(1)
 */
 ```
+
+
+### `->hashGene()`
+以hash算法生成基因ID
+
+- 参数
+  - `int|string $uid`
+
+- 返回`int`
+
+
+### `->gene()`
+生成基因ID
+
+- 参数
+  - `int|string $uid`
+  - `string|null $geneTag = null`
+
+- 返回`int`
+
 
 
 ### `->generate()`

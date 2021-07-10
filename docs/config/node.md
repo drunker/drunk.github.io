@@ -114,6 +114,9 @@ websocket | Websocket请求
 // 配置支持字符串的形式，转为对象时会自动转为数组属性
 'methods' => ['get', 'cli'],
 // 也支持直接定义为数组形式
+
+'methods' => ['get'=>'json', 'websocket'=>'raw'],
+// 可对请求类型指定响应的渲染器，这样可以实现不同方式请求相同接口时渲染不同的结果，不特殊指定时使用render配置的渲染器
 ```
 
 ### `->path`
@@ -153,6 +156,7 @@ websocket | Websocket请求
 json | 使用JSON渲染响应内容（默认）
 jsonp | 使用JSONP渲染响应内容
 xml | 使用XML格式渲染响应内容
+raw | 原始渲染器（不渲染）
 [other.php] | 解析渲染PHP模板并响应（可以以此来渲染复杂结构数据，如HTML、XML等）
 
 ```php
