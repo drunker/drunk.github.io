@@ -37,7 +37,7 @@
 
 ## \dce\base\Exception
 
-Dce异常基类，异常处理器。本类实现了`\dce\loader\ClassDecorator`接口，所以支持静态属性自动实例化及Language注解。
+Dce异常基类，异常处理器。本类实现了`\dce\loader\Decorator`接口，所以支持静态属性自动实例化及Language注解。
 
 
 ### `->openly`

@@ -494,8 +494,14 @@ RegularValidator::inst([
 ### `\dce\model\validator\checker\SetValidator`
 集合校验器
 
+#### `::TYPE_KEY_EXISTS`
+以array_key_exists的方式匹配
+
 #### `->set`
 `array` 允许的值集
+
+#### `->type`
+`int` 匹配方式，默认以in_array的方式匹配
 
 - 示例
 ```php

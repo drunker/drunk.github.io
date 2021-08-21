@@ -49,6 +49,15 @@ var_dump($tree->arrayify());
 ```
 
 
+### `::TRAVERSAL_STOP_CHILD`
+`->traversal()`方法遍历时若返回本常量，则不继续遍历子级
+
+### `::TRAVERSAL_STOP_SIBLING`
+`->traversal()`方法遍历时不继续遍历同级剩余
+
+### `::TRAVERSAL_STOP_ALL`
+`->traversal()`方法遍历时终止过程
+
 ### `->id`
 `string` 树的ID
 

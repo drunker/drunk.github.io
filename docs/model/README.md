@@ -110,6 +110,18 @@ $model->valid();
 ```
 
 
+### `->correct()`
+根据模型属性校验器配置修正并校验数据
+
+- 参数
+  - `array|scalar|Model $value` 待校验数据或模型
+  - `string $prop` 对应模型属性名
+  - `mixed|Validator::RULE_*` $rule 适用规则，默认全规则
+  - `mixed|static::SCENARIO_* $scenario` 适用场景，默认全场景
+
+- 返回`void`
+
+
 ### `->getProperties()`
 取实例类的模型属性实例表
 
