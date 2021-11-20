@@ -20,18 +20,25 @@
   - `private string $scenario = self::SCENARIO_DEFAULT` 设置当前场景名
 
 
-### `->applyProperties()`
+### `->apply()`
 应用模型属性值
 
 - 参数
   - `array|ArrayAccess $properties` 待赋值属性键值表
-  - `bool $unsetDefault = true` 是否清空待赋值属性键之外的属性值
+  - `string $coverType = self::COVER_TYPE_REPLACE` 是否清空待赋值属性键之外的属性值
+    - `COVER_TYPE_UNSET` unset掉默认值
+    - `COVER_TYPE_REPLACE` 若属性已存在则替换
+    - `COVER_TYPE_IGNORE` 若属性已存在则忽略
 
 - 返回`$this`
 
 
-### `->extractProperties()`
+### `->extract()`
 提取模型属性键值表
+
+- 参数
+  - `bool $toDbKey = true` 是否已蛇底命名键返回
+  - `mixed $null = null` 视为无效值的比对值（若属性为该值，将不返回）
 
 - 返回`array`
 
@@ -239,7 +246,7 @@ test($model->partner);
 
 - 参数
   - `array $properties` 属性键值对
-  - `bool $unsetDefault = true` 是否unset掉类属性默认值
+  - `string $coverType = self::COVER_TYPE_UNSET` 同[apply](#apply)
   - `mixed ... $ctorArgs` 需传递到构造函数的参数集
 
 - 返回`static`
@@ -286,11 +293,21 @@ test($model->partner);
 - 返回`self`
 
 
-### `->getValue()`
-取模型属性值，false表示属性未初始化
+### `->isInitialized()`
+属性是否已初始化
 
 - 参数
   - `Model $model` 所属模型实例
+
+- 返回`bool`
+
+
+### `->getValue()`
+取模型属性值
+
+- 参数
+  - `Model $model` 所属模型实例
+  - `mixed $default = null` 默认值，属性未初始化时返回该值
 
 - 返回`string|int|float|null|false`
 

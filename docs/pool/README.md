@@ -126,6 +126,17 @@ $pool->put($redis);
 ```
 
 
+### `->retryableContainer()`
+重试容器，容器中代码执行时，若连接异常断开，则可被自动重新执行以便连接池重连
+
+- 参数
+  - `callable $callback` 需自动重试的代码容器
+  - `ChannelAbstract $thrownChannel` 异常存储通道
+  - `Barrier $barrier = null` Swoole协程屏障
+
+- 返回`void`
+
+
 ### `->setConfigsInterface()`
 子类可以覆盖此方法, 用于从配置中心动态取配置
 

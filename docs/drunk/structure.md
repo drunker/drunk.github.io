@@ -179,3 +179,17 @@ $target = ['a'=>['b'=>1]];
   - `array $refValues` 排序参考值集
 
 - 返回`array`
+
+
+
+### `::arrayChangeKeyCase()`
+将数组键格式化为驼峰或蛇底形式
+
+- 参数
+  - `array $array` 待处理数组
+  - `bool|null $bigCamel = false` 是否大驼峰
+    - `true` 大驼峰
+    - `false` 小驼峰
+    - `null` 蛇底
+
+- 返回`array`

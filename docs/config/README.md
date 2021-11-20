@@ -275,16 +275,22 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 ],
 ```
 
-### `->rpcServers`
-`array` **`c`** Rpc服务配置。设置后在应用启动时, 将会自动启动Rpc服务监听, 并拦截处理Rpc请求方法。格式如下：
+### `->rpcConnection`
+`array` **`c`** Rpc连接配置，配置后会自动拦截rpc命名空间方法，进行远程调用。格式如下：
 ```php
-'rpc_servers' => [
-    [
-        'hosts' => [ // 提供Rpc服务的服务器
-            ['host' => RpcUtility::DEFAULT_TCP_HOST, 'port' => RpcUtility::DEFAULT_TCP_PORT],
-        ],
-        'wildcards' => [RpcUtility::DEFAULT_NAMESPACE_WILDCARD,] // 所需拦截处理的通配符名字空间
-    ],
+'rpc_connection' => [[
+    'hosts' => [['host'=>'', 'port'=>0, 'token'=>''], ],
+    'wildcards' => ['rpc\\*', ]
+], ],
+```
+
+### `->rpcService`
+`array` **`c`** Rpc服务配置，配置后将按需启动Rpc服务器，或者通过命令行主动启动Rpc服务器。格式如下：
+```php
+'rpc_service' => [
+    'hosts' => [['host'=>'', 'port'=>0, 'password'=>'', 'ipWhiteList'=>['{{ip}}', ], 'needNative'=>false, 'needLocal'=>false], ],
+    'prepares' => [['wildcard'=>'rpc\\*', 'root'=>'{{rootDir}}'], ],
+    'preloads' => ['{{phpFile}}', ],
 ],
 ```
 
@@ -356,19 +362,60 @@ DCE配置类（下述标有 **`c`** 标记的项表示仅在公共配置中有�
 `array` 日志记录器配置
 ```php
 'log' => [
-    'access' => [ // 访问日志
-        'request' => 'bool', // console，请求日志
-        'response' => 'bool', // console，响应日志
-        'connect' => 'bool', // console，连接日志，包括disconnect等
-        'send' => 'bool', // console，消息推送日志，包括sentTo与push
+    'dce' => [ // 框架日志
+        'console' => true,
+        'logfile_power' => false,
+        'logfile' => APP_RUNTIME . 'log/dce/%s.log',
+        'logfile_format' => 'Y',
     ],
-    'db' => [ // 数据库日志
-        'console' => false, // 是否在控制台输出日志
+    'access' => [ // 访问日志
+        'connect' => true,
+        'request' => true, // console，请求日志
+        'response' => true, // console，响应日志
+        'send' => false, // console，消息推送日志，包括sentTo与push
+        'logfile_power' => false,
+        'logfile' => APP_RUNTIME . 'log/access/%s.log',
+        'logfile_format' => 'Y-W',
     ],
     'exception' => [ // 异常日志
         'console' => true, // 是否在控制台输出日志
+        'logfile_power' => true,
         'log_file' => APP_RUNTIME . 'log/exception/%s.log', // 日志文件路径（若设置为空则不记录到文件）
-        'log_name_format' => 'Y-m', // 日志文件按日期命名格式化模板
+        'logfile_format' => 'Y-m', // 日志文件按日期命名格式化模板
+    ],
+    'db' => [ // 数据库日志
+        'console' => false, // 是否在控制台输出日志
+        'logfile_power' => false, // mark not support yet
+        'logfile' => APP_RUNTIME . 'log/db/%s.log',
+        'logfile_format' => 'Y-W',
+    ],
+    'rpc' => [ // RPC日志
+        'connect' => true,
+        'request' => true,
+        'response' => true,
+        'logfile_power' => false,
+        'logfile' => APP_RUNTIME . 'log/rpc/%s.log',
+        'logfile_format' => 'Y-W',
+    ],
+    'cron' => [ // 任务计划日志
+        'console' => true,
+        'logfile_power' => true,
+        'logfile' => APP_RUNTIME . 'log/cron/%s.log',
+        'logfile_format' => 'Y-m',
+    ],
+],
+```
+
+### `->cron`
+`array` 任务计划配置
+```php
+'cron' => [
+    // 键值分别表示任务ID与计划规则
+    'default' => [ // 缺省配置，其他任务配置未定义的单元将被自动填充为此缺省值，你可以自定义同健名覆盖缺省配置值
+        'minute' => '*', 'hour' => '*', 'day' => '*', 'month' => '*', 'week' => '*', // 时间语法同Linux crontab
+        'command' => null, // 计划执行的命令行脚本
+        'enabled' => true, // 是否开启
+        'run_on_start' => false, // 是否在启动服务后立即执行一次当前脚本
     ],
 ],
 ```

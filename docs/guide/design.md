@@ -15,16 +15,18 @@ Dce的开源项目分为应用项目[idrunk/dce-app](https://github.com/idrunk/d
 │  │  ├─redis.php               Redis配置
 │  │  ├─tcp.php                 Tcp服务配置
 │  │  ├─websocket.php           Websocket服务配置
-│  ├─service                    公共服务库
+│  ├─lib                        综合库
 │  ├─model                      公共模型库
+│  ├─service                    公共服务库
 ├─project                       项目根目录（可在入口文件中定义APP_PROJECT_ROOT常量自定义）
 │  ├─[PROJECT_NAME_1]           自定义项目1
 │  │  ├─config                  项目配置目录
 │  │  │  ├─config.php           项目配置
 │  │  │  ├─nodes.php            项目节点配置
 │  │  ├─controller              项目控制器目录
-│  │  ├─service                 项目服务类库目录
+│  │  ├─lib                     项目综合库
 │  │  ├─model                   项目模型目录
+│  │  ├─service                 项目服务类库目录
 │  │  ├─template                渲染模板目录
 ├─runtime                       运行时目录（可在入口文件中定义APP_RUNTIME常量自定义）
 │  ├─cache                      File缓存目录

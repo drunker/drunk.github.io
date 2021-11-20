@@ -102,6 +102,17 @@ testPoint((new \dce\base\Exception(lang(['你好 %s !', 'Hello %s !'])))->format
 ```
 
 
+### `->catchWarning()`
+捕获异常作为警告打印到控制台
+
+- 参数
+  - `callable<Throwable, void>|bool $matched` 警告判定条件，支持判定结果布尔值或回调方法
+  - `callable $callable` 需要捕获的过程回调
+  - `mixed ... $params` 需传入捕获回调的参数
+
+- 返回`void`
+
+
 
 ## \dce\base\QuietException
 
@@ -179,10 +190,22 @@ testPoint((new \dce\base\Exception(lang(['你好 %s !', 'Hello %s !'])))->format
 - 返回`bool`
 
 
+### `::inSwooleCli()`
+是否处于SwooleCli环境
+
+- 返回`bool`
+
+
 ### `::inCoroutine()`
 判断是否处于协程上下文环境
 
 - 返回`bool`
+
+
+### `::eventExit()`
+停止Swoole事件监听
+
+- 返回`void`
 
 
 ### `::coroutineHook()`

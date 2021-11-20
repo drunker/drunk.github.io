@@ -314,6 +314,10 @@ $query = Member::query();
 ### `->insert();`
 向数据库插入数据
 
+- 参数
+  - `bool $needLoadNew = false` 是否将已插入记录载入到当前对象
+  - `bool|null $ignoreOrReplace = null`
+
 - 返回`int|string`
 
 - 示例

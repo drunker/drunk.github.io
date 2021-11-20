@@ -102,3 +102,22 @@
   - `string $elderPath` 父类节点路径
 
 - 返回`bool`
+
+
+### `::getTreeByHost()`
+根据主机地址匹配节点树 (主用于对主机与项目绑定特性的支持)
+
+- 参数
+  - `string $host`
+
+- 返回`NodeTree|null`
+
+
+### `::exists()`
+判断路径是否有效，返回命中节点树或null
+
+- 参数
+  - `string $path` 待查节点路径
+  - `bool $tryFillRoot = true` 是否尝试自动补充根路径部分
+
+- 返回`NodeTree|null`

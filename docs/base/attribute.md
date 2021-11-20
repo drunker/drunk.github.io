@@ -110,9 +110,62 @@ testPoint( // 打印自动实例化的类静态属性
 
 
 
+## \dce\loader\attr\SingMatrix;
+
+### `::gen()`
+生成获取单例实例
+
+- 参数
+  - `class-string<T>|callable $class`
+  - `...$args`
+
+- 返回`T`
+
+
+### `::logInstance()`
+登记单例实例
+
+- 参数
+  - `string $id`
+  - `T $instance`
+
+- 返回`T`
+
+
+### `::generated()`
+取单例实例，若单例未生成，则返回其ID字符串
+
+- 参数
+  - `class-string<T> $class`
+  - `mixed ... $args`
+
+- 返回`T|string`
+
+
+### `::destroy()`
+注销一个单例实例
+
+- 参数
+  - `class-string<T> $class`
+  - `mixed ... $args`
+
+- 返回`void`
+
+
+### `::new()`
+实例化一个对象
+
+- 参数
+  - `class-string<T> $class`
+  - `mixed ... $args`
+
+- 返回`T`
+
+
+
 ## \dce\loader\attr\Singleton
 
-单例实例器，自动实例化单例实例。与实例器接口类似，能自动实例化单例实例，仅能以注解的形式使用。
+单例实例器，自动实例化单例实例。与实例器接口类似，能自动实例化单例实例。
 
 
 

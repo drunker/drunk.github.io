@@ -43,24 +43,11 @@ fdid | 长连接 | 连接ID，一个连接只会有一个ID
 - 返回`static`
 
 
-### `->clear()`
-清空FdForm，服务器初始化时自动调用，防止前次服务器发生异常导致未正常断开连接而留下垃圾数据。
-
-- 参数
-  - `string $apiHost`
-  - `int $apiPort`
-
-- 返回`void`
-
-
 ### `->connect()`
 连接时同步会话状态，Dce在连接建立时自动调用
 
 - 参数
-  - `string $sid` 会话ID
-  - `int $fd` 连接文件描述符
-  - `string $apiHost` 服务器接口主机
-  - `int $apiPort` 服务器接口端口
+  - `\dce\service\server\Connection $conn` 连接实例
   - `string $extra` 扩展信息（默认为服务器类型，['ws', 'tcp']）
 
 - 返回`void`
@@ -70,9 +57,7 @@ fdid | 长连接 | 连接ID，一个连接只会有一个ID
 断开连接时同步会话状态，Dce在连接断开时自动调用
 
 - 参数
-  - `int $fd` 连接文件描述符
-  - `string $apiHost` 服务器接口主机
-  - `int $apiPort` 服务器接口端口
+  - `Connection $conn` 连接实例
 
 - 返回`void`
 
@@ -91,25 +76,6 @@ fdid | 长连接 | 连接ID，一个连接只会有一个ID
 $signer = Member::login($username, $password);
 // 标记用户与会话映射
 SessionManager::inst()->login($signer['mid'], $request->session->getId());
-```
-
-
-### `->fdLogin()`
-处理长连接登录，标记mid相关信息，需要你在长连接的登录业务中手动调用
-
-- 参数
-  - `int $mid` 用户ID
-  - `int $fd` 连接文件描述符
-  - `string $apiHost` 服务器接口主机
-  - `int $apiPort` 服务器接口端口
-
-- 返回`void`
-
-- 示例
-```php
-$signer = Member::login($username, $password);
-// 标记用户与会话及连接映射
-SessionManager::inst()->fdLogin($signer['mid'], $request->fd, $request->rawRequest->getServer()->apiHost, $request->rawRequest->getServer()->apiPort);
 ```
 
 
@@ -265,7 +231,7 @@ $fdFormList = SessionManager::inst()->listFdForm(limit: null);
     - `false` 取mid，如`1000`
     - `null` 取整个SessionForm，如`["fdid"=>["127.0.0.1:20700/10"], "mid"=>1000]`
 
-- 返回`array|int|false`
+- 返回`array|string|int|false`
 
 
 ### `->getMemberForm()`

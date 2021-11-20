@@ -12,7 +12,7 @@ RPC服务类，注册暴露支持RPC的服务接口
 创建一个服务实例
 
 - 参数
-  - `\dce\rpc\RpcHost $rpcHost` RPC主机实例
+  - `\dce\rpc\RpcHost|null $rpcHost = null` RPC主机实例
 
 - 返回`self`
 
@@ -21,7 +21,7 @@ RPC服务类，注册暴露支持RPC的服务接口
 创建一个RPC主机实例
 
 - 参数
-  - `string $host = RpcUtility::DEFAULT_TCP_HOST` 主机地址
+  - `string $host` 主机地址
   - `int $port = RpcUtility::DEFAULT_TCP_PORT` 绑定端口
 
 - 返回`\dce\rpc\RpcHost`
@@ -82,7 +82,6 @@ $server->preload('service/HelloRemote.php');
 启动Rpc服务
 
 - 参数
-  - `callable|bool $callback = true` 新进程启动回调，为布尔值时表示是否创建新进程
   - `bool $useAsyncServer = false` 是否使用异步Tcp服务
     - `true` 使用异步版Tcp
     - `false` 使用协程版Tcp
@@ -221,23 +220,31 @@ $result = RpcClient::with(self::LOCAL_API_HOST, 0, fn() => \rpc\HelloRemote::hel
 ```
 
 
-## \dce\rpc\DceRpcClient
+## \dce\rpc\DceRpcLoader
 
-DCE Rpc客户端自动注册工具类，本类无需主动调用，配置好`rpc_servers`后DCE会在启动时自动调用。
+DCE Rpc客户端自动注册工具类，本类无需主动调用，配置好`rpcService`后DCE会在启动时自动调用。
 
 
 - 示例
 ```php
 // config.php
-// 在config中注册后，DCE在启动时会自动注册这些RPC服务，无需主动调用RpcClient注册，直接调用远程接口方法即可
+// 在config中配置rpcService后，Dce将自动在守护进程中创建Rpc服务器
 [
-  'rpc_servers' => [
-    [
-      'hosts' => [ // 提供Rpc服务的服务器
-        ['host' => RpcUtility::DEFAULT_TCP_HOST, 'port' => RpcUtility::DEFAULT_TCP_PORT],
-      ],
-      'wildcards' => ['rpc\*',] // 所需拦截处理的通配符名字空间
+  'rpcService' => [
+    'hosts' => [['host'=>'', 'port'=>0, 'password'=>'', 'ipWhiteList'=>['{{ip}}', ], 'needNative'=>false, 'needLocal'=>false], ],
+    'prepares' => [['wildcard'=>'rpc\\*', 'root'=>'{{rootDir}}'], ],
+    'preloads' => ['{{phpFile}}', ],
+  ]
+]
+
+// 在config中配置rpcConnection后，Dce将自动按照配置注册Rpc服务，你无需手动调用RpcClient即可直接调用Rpc方法
+'rpc_connection' => [
+  [
+    'hosts' => [
+      ['host' => 'host1', 'port' => 'port1', 'token' => ''],
+      ['host' => 'host2', 'port' => 'port2', ],
     ],
+    'wildcards' => ['rpc\*', 'http\server\*'],
   ]
 ]
 

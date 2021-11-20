@@ -24,8 +24,11 @@ Event::trigger('my_event', [3, 4]);
 ### `::AFTER_DCE_INIT`
 `string` Dce初始化完成时回调（此时基础组件已初始化完毕，可以在这里派生子进程，这里创建的子进程才能拥有对象完整的基础组件） `@callable()`
 
-### `::BEFORE_REQUEST`
+### `::BEFORE_ROUTE`
 `string` Request对象初始化前回调 `@callable(RawRequest)`
+
+### `::AFTER_ROUTE`
+`string` Request对象初始化后回调 `@callable(Request)`
 
 ### `::BEFORE_CONTROLLER`
 `string` 进入控制器前回调 `@callable(Request)`
@@ -35,6 +38,9 @@ Event::trigger('my_event', [3, 4]);
 
 ### `::AFTER_CONTROLLER`
 `string` 控制器执行完毕回调 `@callable(Controller)`
+
+### `::AFTER_DAEMON`
+`string` 守护进程启动后在其中回调 `@callable()`
 
 
 ### `::on()`

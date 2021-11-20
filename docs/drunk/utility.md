@@ -13,6 +13,15 @@
 - 返回`bool`
 
 
+### `::isEmpty()`
+递归判断对象是否为空（若为数组，则无元素、或仅有空数组的元素，亦视为空）
+
+- 参数
+  - `mixed $object` 需判断的值
+
+- 返回`bool`
+
+
 ### `::printable()`
 将传入值转为可打印的类型并返回
 
@@ -36,3 +45,13 @@
 取一个空方法
 
 - 返回`\Closure`
+
+
+### `::staticConstraint()`
+限制静态方法必须在子类执行
+
+- 参数
+    - `string $parentClass` 父类命
+    - `string $staticClass` 需断言的目标类名
+
+- 返回`void`

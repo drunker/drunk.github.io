@@ -222,7 +222,37 @@ Dce设计了内置项目的概念，所谓内置项目，就是内置在Dce框�
 
 
 
-### `\dce\service\server\RawRequestConnection`
+### \dce\service\server\Connection
+
+长连接
+
+
+#### `::from()`
+取单例连接实例
+
+- 参数
+  - `int $fd`
+  - `ServerMatrix $server = null`
+
+- 返回`self`
+
+
+#### `::exists()`
+根据fd取连接实例，找不到则返回null
+
+- 参数
+  - `int $fd`
+
+- 返回`self|null`
+
+- 示例
+```php
+$conn = Connection::exists(1);
+```
+
+
+
+### `\dce\service\server\RawRequestConnection;`
 
 长连接型原始请求类
 
