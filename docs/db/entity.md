@@ -11,7 +11,7 @@
 ### `->__construct()`
 
 - 参数
-  - `string|null $type = null` 字段类型，已在`\dce\db\entity\schema\FieldType`类定义为常量
+  - `FieldType|null $type = null` 字段类型，已在`\dce\db\entity\schema\FieldType`类定义为常量
   - `int $length = 0` 字符串或Decimal字段最大字符数或数值字段最大字节
   - `string|int|float|false $default = false` 默认值
   - `string $comment = ''` 字段注释
@@ -24,19 +24,19 @@
 - 示例
 ```php
 class MemberBadge extends DbActiveRecord {
-    #[ Property, DbField(FieldType::TINYINT), ]
+    #[ Property, DbField(FieldType::Tinyint), ]
     public int $id;
 
-    #[ Property('徽章名'), DbField(FieldType::VARCHAR, 15),
+    #[ Property('徽章名'), DbField(FieldType::Varchar, 15),
         Validator(Validator::RULE_STRING, max: 15),
         Validator(Validator::RULE_REQUIRED),
     ]
     public string $name;
 
-    #[ Property('备注'), DbField(FieldType::VARCHAR), Validator(Validator::RULE_STRING, max: 32), ]
+    #[ Property('备注'), DbField(FieldType::Varchar), Validator(Validator::RULE_STRING, max: 32), ]
     public string $memo;
 
-    #[ Property('添加时间'), DbField(FieldType::DATETIME), Validator(Validator::RULE_DATETIME), ]
+    #[ Property('添加时间'), DbField(FieldType::Datetime), Validator(Validator::RULE_DATETIME), ]
     public string $createTime;
 }
 ```
@@ -50,6 +50,18 @@ class MemberBadge extends DbActiveRecord {
 取字段类型实例
 
 - 返回`\dce\db\entity\schema\FieldType`
+
+
+### `->isUnsigned()`
+是否无符号
+
+
+### `->getLength()`
+取最大长度
+
+
+### `->getPrecision()`
+取小数位数
 
 
 ### `->isPrimaryKey()`
@@ -73,58 +85,58 @@ class MemberBadge extends DbActiveRecord {
 
 
 
-## \dce\db\entity\schema\FieldType
+## \dce\db\entity\FieldType
 
-字段类型类，下述为类型常量
+字段类型枚举
 
 
-### `::INT`
+### `::Int`
 
-### `::TINYINT`
+### `::Tinyint`
 
-### `::SMALLINT`
+### `::Smallint`
 
-### `::MEDIUMINT`
+### `::Mediumint`
 
-### `::BIGINT`
+### `::Bigint`
 
-### `::DECIMAL`
+### `::Decimal`
 
-### `::FLOAT`
+### `::Float`
 
-### `::DOUBLE`
+### `::Double`
 
-### `::VARCHAR`
+### `::Varchar`
 
-### `::CHAR`
+### `::Char`
 
-### `::TINYTEXT`
+### `::Tinytext`
 
-### `::TEXT`
+### `::Text`
 
-### `::MEDIUMTEXT`
+### `::Mediumtext`
 
-### `::LONGTEXT`
+### `::Longtext`
 
-### `::TINYBLOB`
+### `::Tinyblob`
 
-### `::BLOB`
+### `::Blob`
 
-### `::MEDIUMBLOB`
+### `::Mediumblob`
 
-### `::LONGBLOB`
+### `::Longblob`
 
-### `::JSON`
+### `::Json`
 
-### `::DATE`
+### `::Date`
 
-### `::DATETIME`
+### `::Datetime`
 
-### `::TIMESTAMP`
+### `::Timestamp`
 
-### `::TIME`
+### `::Time`
 
-### `::YEAR`
+### `::Year`
 
 
 ### `->__construct()`

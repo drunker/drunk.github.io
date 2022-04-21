@@ -47,6 +47,19 @@
 - 返回`array|string|int|false`
 
 
+### `::arraySearchItem()`
+用回调函数在数组中查找匹配值集
+
+- 参数
+  - `callable $needle` 比对方法，返回真即命中
+  - `array $haystack` 查找源
+  - `bool $lazyMode = true` 是否惰性查找
+    - `true` 若找到，则直接返回其下标
+    - `false` 遍历完后返回匹配元素的下标集
+
+- 返回`mixed`
+
+
 ### `::arraySearchMatrix()`
 查询 参1 在 参2 数组元素中是否有相同值, 返回其在参2中的索引值集
 
@@ -168,6 +181,25 @@ $target = ['a'=>['b'=>1]];
 \drunk\Structure::arrayIndexGet([2=>1, 3=>1]);
 // false
 ```
+
+
+### `::arrayEntries()`
+取键值元组集
+
+- 参数
+  - `array|ArrayAccess|Iterator $iterator` 可遍历对象
+
+- 返回`array`
+
+
+### `::forEach()`
+遍历对象并执行回调
+
+- 参数
+  - `array|ArrayAccess|Iterator $iterator` 待遍历对象
+  - `callable $callback` 回调方法
+
+- 返回`void`
 
 
 ### `::sortByColumnRef()`

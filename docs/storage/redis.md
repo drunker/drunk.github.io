@@ -3,9 +3,24 @@
 Redis库依赖phpredis扩展
 
 
-## \dce\storage\redis\DceRedis
+## \dce\storage\redis\RedisProxy
 
-Redis静态工具类
+Redis静态代理类
+
+
+### `::new()`
+取一个Redis代理实例
+
+- 参数
+  - `int $index = -1` 目标库号，-1表示以`Dce::$config->redis['index']`为准
+  - `bool $noSerialize = false` 是否不自动序列化储存（Dce为了方便存储各种类型的数据，默认开启了自动序列化，你可以通过该参数强制不自动序列化）
+
+- 返回`static`
+
+- 示例
+```php
+RedisProxy::new()->set('homepage', 'https://drunkce.com');
+```
 
 
 ### `::isAvailable()`
@@ -15,38 +30,12 @@ Redis静态工具类
 
 - 示例
 ```php
-if (\dce\storage\redis\DceRedis::isAvailable()) {
+if (\dce\storage\redis\RedisProxy::isAvailable()) {
     // 使用Redis IO
 } else {
     // 使用文件或其他IO
 }
 ```
-
-
-### `::get()`
-取Redis实例，必须与`::put()`成对调用（本方法自动根据环境判定从实例池取还是新建连接，所有需要Redis对象的地方都应该用本方法获取）
-
-- 参数
-  - `int $index = -1` 目标库号，-1表示以`Dce::$config->redis['index']`为准
-  - `bool $noSerialize = false` 是否不自动序列化储存（Dce为了方便存储各种类型的数据，默认开启了自动序列化，你可以通过该参数强制不自动序列化）
-
-- 返回`\Redis`
-
-- 示例
-```php
-$redis = DceRedis::get();
-$redis->set('homepage', 'https://drunkce.com');
-DceRedis::put($redis);
-```
-
-
-### `::put()`
-尝试将实例归还连接池并还原Redis设置
-
-- 参数
-  - `\Redis` Redis实例
-
-- 返回`void`
 
 
 
@@ -158,6 +147,7 @@ public function match($config): bool {
 ## Redis连接池使用示例
 
 ```php
+// 代理类会自动根据环境判断是否使用实例池连接，因此你大概不必如下手动使用
 // 取连接池实例
 $pool = RedisPool::inst()->setConfigs([
   ['host' => '127.0.0.1', 'port' => 6379],

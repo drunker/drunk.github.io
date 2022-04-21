@@ -329,6 +329,9 @@ $member->insert();
 ### `->update();`
 将当前对象更新到数据库
 
+- 参数
+  - `array $columns = []` 指定需更新的属性字段而不更新全部
+
 - 返回`int`
 
 - 示例
@@ -453,14 +456,19 @@ test($list);
 ```
 
 
-### `::getPkFields()`
+### `::getPks()`
 取数据表主键集
+
+- 返回`Field[]`
+
+### `::getPkNames()`
+取数据表主键名集
 
 - 返回`string[]`
 
 - 示例
 ```php
-$pks = MemberBadge::getPkFields();
+$pks = MemberBadge::getPks();
 test($pks);
 /*
 1-1    array(1) {
@@ -786,6 +794,10 @@ class Member extends DbActiveRecord {
 
 *下述方法在活动记录相关类中自动调用，无需手动调用*
 
+### `->getName()`
+取关系名
+
+
 ### `->hasOne()`
 设为一对一关联关系
 
@@ -806,5 +818,5 @@ class Member extends DbActiveRecord {
 取关联关系映射表
 
 
-### `->getVia()`
-取中间关系名
+### `->getRelationColumns()`
+取关系字段映射

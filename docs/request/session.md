@@ -143,4 +143,4 @@ test($request->session->getAll());
 
 Redis版Session储存器。Session数据将储存于Redis服务器，分布式服务器只要连接相同的或者分布式Redis，则可以共享数据而不会丢失会话，并且能获得较好的性能，因此推荐使用该储存器。
 
-若Redis可用`if (\dce\storage\redis\DceRedis::isAvailable())`（即你配置了[Redis主机端口](/config/#redis)），则Dce会默认使用Redis储存器，否则默认使用文件储存器。你可以自定义其他储存器，只需要继承实现`\dce\project\session\Session;`类定义的抽象方法，然后通过[Session配置](/config/#session)`\dce\config\DceConfig::$session['class']`将类设置为你实现的类即可。
+若Redis可用`if (\dce\storage\redis\RedisProxy::isAvailable())`（即你配置了[Redis主机端口](/config/#redis)），则Dce会默认使用Redis储存器，否则默认使用文件储存器。你可以自定义其他储存器，只需要继承实现`\dce\project\session\Session;`类定义的抽象方法，然后通过[Session配置](/config/#session)`\dce\config\DceConfig::$session['class']`将类设置为你实现的类即可。

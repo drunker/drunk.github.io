@@ -24,13 +24,24 @@
 应用模型属性值
 
 - 参数
-  - `array|ArrayAccess $properties` 待赋值属性键值表
-  - `string $coverType = self::COVER_TYPE_REPLACE` 是否清空待赋值属性键之外的属性值
-    - `COVER_TYPE_UNSET` unset掉默认值
-    - `COVER_TYPE_REPLACE` 若属性已存在则替换
-    - `COVER_TYPE_IGNORE` 若属性已存在则忽略
+  - `array|self $properties` 待赋值属性键值表
+  - `CoverType $coverType = CoverType::Replace` 是否清空待赋值属性键之外的属性值
+    - `Unset` unset掉默认值
+    - `Replace` 若属性已存在则替换
+    - `Ignore` 若属性已存在则忽略
 
 - 返回`$this`
+
+
+### `->setPropertyValue()`
+设置模型属性值
+
+- 参数
+  - `string $key` 属性名
+  - `mixed $value` 属性值
+  - `bool $ignoreExists = false` 若已存在是否覆盖
+
+- 返回`void`
 
 
 ### `->extract()`
@@ -246,7 +257,7 @@ test($model->partner);
 
 - 参数
   - `array $properties` 属性键值对
-  - `string $coverType = self::COVER_TYPE_UNSET` 同[apply](#apply)
+  - `CoverType $coverType = CoverType::Replace` 同[apply](#apply)
   - `mixed ... $ctorArgs` 需传递到构造函数的参数集
 
 - 返回`static`
@@ -291,6 +302,26 @@ test($model->partner);
   - `Field|null $field`
 
 - 返回`self`
+
+
+### `->setField()`
+设置字段属性
+
+- 参数
+  - `Field $field`
+
+- 返回`void`
+
+
+### `->setValue()`
+设置模型属性值
+
+- 参数
+  - `Model $model` 模型对象
+  - `mixed $value` 待设值
+  - `bool $ignoreExists` 是否不覆盖
+
+- 返回`void`
 
 
 ### `->isInitialized()`
